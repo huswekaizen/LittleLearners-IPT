@@ -1,0 +1,176 @@
+.category-card {
+    min-height: 15.3rem;
+    padding: 1.2rem;
+    border: 1px solid rgb(38 55 46 / 4%);
+    border-radius: var(--radius-medium);
+    box-shadow: var(--shadow-card);
+    transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.category-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-soft);
+}
+
+.card-lime { background: #e7f1dc; }
+.card-blue { background: #e2edf8; }
+.card-peach { background: #ffeadb; }
+.card-lavender { background: #eee9fa; }
+.card-yellow { background: #fbf0c9; }
+
+.category-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.category-emoji {
+    display: grid;
+    width: 2.9rem;
+    height: 2.9rem;
+    place-items: center;
+    border: 2px solid rgb(255 255 255 / 75%);
+    border-radius: 1rem;
+    background: rgb(255 255 255 / 55%);
+    font-size: 1.45rem;
+}
+
+.card-arrow {
+    color: rgb(38 55 46 / 48%);
+    font-size: 1rem;
+}
+
+.card-label {
+    margin: 0.8rem 0 0.15rem;
+    color: var(--color-text-muted);
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+}
+
+.category-card h2,
+.category-card h3,
+.next-step-card h3 {
+    margin: 0;
+    font-size: 1.35rem;
+    letter-spacing: -0.04em;
+    line-height: 1.25;
+}
+
+.category-card > p:not(.card-label),
+.next-step-card > p:not(.eyebrow) {
+    max-width: 18rem;
+    margin: 0.4rem 0 0.8rem;
+    color: #58675e;
+    font-size: 0.8rem;
+    line-height: 1.45;
+}
+
+.text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-primary-dark);
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.text-link:hover span {
+    transform: translateX(3px);
+}
+
+.text-link span {
+    transition: transform 150ms ease;
+}
+
+.next-step-card {
+    position: relative;
+    display: flex;
+    min-height: 15.3rem;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    overflow: hidden;
+    padding: 1.3rem;
+    border-radius: var(--radius-medium);
+    background: #dcece0;
+}
+
+.next-step-card .eyebrow {
+    margin-bottom: 0.5rem;
+    color: #4b7458;
+}
+
+.next-step-card > p:not(.eyebrow) {
+    margin-bottom: 0.85rem;
+}
+
+.next-step-star {
+    position: absolute;
+    top: -1.2rem;
+    right: 0.5rem;
+    color: rgb(255 255 255 / 35%);
+    font-size: 7rem;
+}
+
+.next-step-card > *:not(.next-step-star) {
+    position: relative;
+}
+
+.lesson-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 0.95rem;
+    border: 1px solid #e8ecdf;
+    border-radius: var(--radius-small);
+    background: #fbfcf8;
+    transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.lesson-card:hover {
+    border-color: #b7d1b3;
+    transform: translateY(-2px);
+}
+
+.lesson-order {
+    display: grid;
+    width: 2.2rem;
+    height: 2.2rem;
+    flex: 0 0 auto;
+    place-items: center;
+    border-radius: 0.75rem;
+    background: #e7f1dc;
+    color: var(--color-primary-dark);
+    font-size: 0.75rem;
+    font-weight: 800;
+}
+
+.lesson-card h3 {
+    margin: 0;
+    font-size: 0.98rem;
+    letter-spacing: -0.02em;
+}
+
+.lesson-card p {
+    margin: 0.25rem 0 0.45rem;
+    color: var(--color-text-muted);
+    font-size: 0.76rem;
+    line-height: 1.4;
+}
+
+.button:focus-visible,
+.site-nav a:focus-visible,
+.text-link:focus-visible,
+.back-link:focus-visible,
+.brand:focus-visible,
+.footer-brand:focus-visible,
+.welcome-bottom a:focus-visible {
+    outline: 3px solid #236f4b;
+    outline-offset: 4px;
+}
+
+.answer-option:focus-visible {
+    outline: 3px solid #236f4b;
+    outline-offset: 3px;
+}

@@ -1,0 +1,277 @@
+@media (max-width: 800px) {
+    :root {
+        --space-page: clamp(1.25rem, 5vw, 2.5rem);
+    }
+
+    .welcome-layout {
+        grid-template-columns: 1fr 0.9fr;
+        gap: 1.5rem;
+    }
+
+    .hero-art {
+        min-height: 21rem;
+        transform: scale(0.9);
+    }
+
+    .category-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .recent-activity-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .category-card,
+    .next-step-card {
+        min-height: 14rem;
+    }
+
+    .lesson-layout {
+        gap: 2rem;
+    }
+
+    .category-content-grid {
+        grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+        gap: 0.8rem;
+    }
+
+    .my-learning-lesson-list {
+        grid-template-columns: 1fr;
+    }
+
+    .category-goals-panel,
+    .lesson-list-panel {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .site-header {
+        min-height: 4.5rem;
+    }
+
+    .brand {
+        gap: 0.4rem;
+        font-size: 0.96rem;
+    }
+
+    .brand-mark {
+        width: 1.8rem;
+        height: 1.8rem;
+    }
+
+    .site-nav {
+        gap: 0.75rem;
+        font-size: 0.78rem;
+    }
+
+    .nav-cta {
+        padding: 0.55rem 0.75rem;
+    }
+
+    .welcome-screen {
+        padding-top: 3rem;
+    }
+
+    .welcome-layout {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+
+    .welcome-copy h1 {
+        max-width: 11ch;
+        font-size: clamp(2.5rem, 12vw, 3.5rem);
+    }
+
+    .hero-description {
+        max-width: 27rem;
+        margin: 1rem 0 1.25rem;
+        font-size: 1rem;
+    }
+
+    .hero-actions {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.65rem;
+    }
+
+    .learner-note {
+        margin-top: 1.4rem;
+    }
+
+    .hero-art {
+        min-height: 18rem;
+        margin: 0 auto;
+        transform: scale(0.76);
+        transform-origin: center top;
+        width: 125%;
+    }
+
+    .welcome-bottom {
+        margin-top: -1rem;
+        font-size: 0.58rem;
+    }
+
+    .dashboard-screen {
+        padding-top: 2.5rem;
+    }
+
+    .explore-screen {
+        padding-top: 1.5rem;
+    }
+
+    .explore-heading {
+        margin: 1.25rem 0 1.4rem;
+    }
+
+    .dashboard-welcome {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .dashboard-welcome h1 {
+        font-size: 2.25rem;
+    }
+
+    .dashboard-welcome > div:first-child > p:last-child {
+        font-size: 0.9rem;
+    }
+
+    .progress-strip {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .progress-summary {
+        width: 100%;
+        grid-template-columns: 1fr auto;
+    }
+
+    .section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 2.2rem;
+    }
+
+    .category-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .recent-activity-list {
+        grid-template-columns: 1fr;
+    }
+
+    .category-card,
+    .next-step-card {
+        min-height: 13.5rem;
+    }
+
+    .lesson-layout {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+        padding-top: 2.5rem;
+    }
+
+    .category-content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .category-page-heading {
+        margin: 1.5rem 0;
+    }
+
+    .my-learning-screen {
+        padding-top: 1.5rem;
+    }
+
+    .my-learning-heading {
+        margin: 1.25rem 0 1rem;
+    }
+
+    .my-learning-category-heading .category-heading-icon {
+        width: 2.7rem;
+        height: 2.7rem;
+        font-size: 1.4rem;
+    }
+
+    .category-page-heading h1 {
+        gap: 0.6rem;
+        font-size: 2rem;
+    }
+
+    .category-heading-icon {
+        width: 2.8rem;
+        height: 2.8rem;
+        border-radius: 0.9rem;
+        font-size: 1.45rem;
+    }
+
+    .activity-question-list {
+        grid-template-columns: 1fr;
+    }
+
+    .activity-question {
+        padding: 0.85rem;
+    }
+
+    .lesson-copy h1 {
+        font-size: 2.7rem;
+    }
+
+    .lesson-visual {
+        min-height: 17rem;
+    }
+
+    .activity-topline {
+        margin-top: 1.5rem;
+        font-size: 0.62rem;
+    }
+
+    .quiz-heading {
+        align-items: flex-start;
+        gap: 0.65rem;
+    }
+
+    .quiz-illustration {
+        width: 2.8rem;
+        height: 2.8rem;
+        font-size: 1.35rem;
+    }
+
+    .quiz-heading h1 {
+        font-size: 1.5rem;
+    }
+
+    .quiz-panel {
+        border-radius: 1.35rem;
+    }
+
+    .results-breakdown {
+        grid-template-columns: 1fr;
+    }
+
+    .site-footer {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.25rem;
+        padding-block: 1rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .site-nav {
+        gap: 0.5rem;
+        font-size: 0.72rem;
+    }
+
+    .welcome-bottom span {
+        max-width: 8rem;
+    }
+}

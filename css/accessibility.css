@@ -1,0 +1,253 @@
+.skip-link {
+    position: fixed;
+    z-index: 10;
+    top: 0.6rem;
+    left: 0.6rem;
+    padding: 0.7rem 1rem;
+    border-radius: var(--radius-small);
+    background: var(--color-text);
+    color: #fff;
+    transform: translateY(-150%);
+}
+
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    clip-path: inset(50%) !important;
+}
+
+.skip-link:focus {
+    transform: translateY(0);
+}
+
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 3px solid #236f4b;
+    outline-offset: 4px;
+}
+
+html[data-text-size="larger"] { font-size: 112.5%; }
+html[data-text-size="largest"] { font-size: 125%; }
+
+.accessibility-button,
+.accessibility-close {
+    min-height: 2.75rem;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+    color: var(--color-primary-dark);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 800;
+}
+
+.accessibility-dialog {
+    width: min(38rem, calc(100vw - 2rem));
+    max-width: none;
+    max-height: min(90dvh, 54rem);
+    overflow: auto;
+    padding: clamp(1.1rem, 4vw, 2rem);
+    border: 2px solid var(--color-line);
+    border-radius: var(--radius-large);
+    background: var(--color-surface);
+    color: var(--color-text);
+    box-shadow: 0 20px 70px rgb(20 35 25 / 28%);
+}
+
+.accessibility-dialog::backdrop { background: rgb(20 35 25 / 55%); }
+.accessibility-dialog-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.accessibility-dialog-heading .eyebrow { margin-bottom: 0.35rem; }
+.accessibility-dialog h2 { margin: 0; font-size: clamp(1.35rem, 4vw, 1.8rem); line-height: 1.2; }
+.accessibility-dialog > p:not(.eyebrow) { color: var(--color-text-muted); }
+.accessibility-close { min-width: 2.75rem; padding: 0; font-size: 1.4rem; }
+.accessibility-controls { display: grid; gap: 1rem; }
+.accessibility-controls fieldset { min-width: 0; margin: 0; padding: 1rem; border: 1px solid var(--color-line); border-radius: var(--radius-small); }
+.accessibility-controls legend { padding-inline: 0.25rem; font-weight: 800; }
+.accessibility-help { margin: 0 0 0.7rem; color: var(--color-text-muted); font-size: 0.9rem; }
+.text-size-options { display: flex; flex-wrap: wrap; gap: 0.55rem; }
+.text-size-options label { position: relative; cursor: pointer; }
+.text-size-options input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.text-size-options span { display: inline-flex; min-height: 2.8rem; align-items: center; justify-content: center; padding: 0.55rem 0.9rem; border: 1px solid var(--color-line); border-radius: var(--radius-pill); background: var(--color-surface); font-weight: 700; }
+.text-size-options input:checked + span { border: 2px solid var(--color-primary-dark); background: var(--color-primary-soft); }
+.text-size-options input:focus-visible + span { outline: 3px solid #236f4b; outline-offset: 3px; }
+.accessibility-toggle { display: flex; min-height: 2.8rem; align-items: center; gap: 0.7rem; cursor: pointer; font-weight: 700; }
+.accessibility-toggle input { width: 1.3rem; height: 1.3rem; accent-color: var(--color-primary-dark); }
+.accessibility-storage-status { min-height: 1.4em; margin: 0.8rem 0; color: var(--color-text-muted); font-size: 0.85rem; }
+.accessibility-dialog-actions { display: flex; justify-content: flex-end; }
+
+html[data-high-contrast="true"] {
+    color-scheme: dark;
+    --color-primary: #ffeb00;
+    --color-primary-dark: #ffeb00;
+    --color-primary-soft: #242424;
+    --color-background: #000;
+    --color-surface: #101010;
+    --color-text: #fff;
+    --color-text-muted: #f2f2f2;
+    --color-line: #fff;
+    --shadow-soft: none;
+    --shadow-card: none;
+}
+
+html[data-high-contrast="true"] .site-header,
+html[data-high-contrast="true"] .site-footer,
+html[data-high-contrast="true"] .progress-strip,
+html[data-high-contrast="true"] .next-step-card,
+html[data-high-contrast="true"] .category-card,
+html[data-high-contrast="true"] .lesson-card,
+html[data-high-contrast="true"] .recent-activity-card,
+html[data-high-contrast="true"] .category-goals-panel,
+html[data-high-contrast="true"] .lesson-list-panel,
+html[data-high-contrast="true"] .question-visual,
+html[data-high-contrast="true"] .visual-group,
+html[data-high-contrast="true"] .quiz-panel,
+html[data-high-contrast="true"] .activity-question,
+html[data-high-contrast="true"] .results-card,
+html[data-high-contrast="true"] .my-learning-category,
+html[data-high-contrast="true"] .my-learning-lesson,
+html[data-high-contrast="true"] .instruction-panel,
+html[data-high-contrast="true"] .lesson-visual,
+html[data-high-contrast="true"] .practice-callout,
+html[data-high-contrast="true"] .category-note,
+html[data-high-contrast="true"] .my-learning-storage-note,
+html[data-high-contrast="true"] .progress-save-note,
+html[data-high-contrast="true"] .accessibility-dialog,
+html[data-high-contrast="true"] .accessibility-controls fieldset,
+html[data-high-contrast="true"] .answer-option {
+    border-color: #fff;
+    background: #101010;
+    color: #fff;
+}
+
+html[data-high-contrast="true"] .welcome-screen,
+html[data-high-contrast="true"] .results-screen { background: #000; }
+
+html[data-high-contrast="true"] .category-heading-icon,
+html[data-high-contrast="true"] .lesson-order,
+html[data-high-contrast="true"] .my-learning-status,
+html[data-high-contrast="true"] .progress-icon,
+html[data-high-contrast="true"] .instruction-icon,
+html[data-high-contrast="true"] .quiz-illustration,
+html[data-high-contrast="true"] .celebration-art {
+    border: 1px solid #fff;
+    background: #101010;
+    color: #fff;
+}
+
+html[data-high-contrast="true"] .category-card > p:not(.card-label),
+html[data-high-contrast="true"] .next-step-card > p:not(.eyebrow),
+html[data-high-contrast="true"] .card-label,
+html[data-high-contrast="true"] .progress-copy p,
+html[data-high-contrast="true"] .progress-summary small,
+html[data-high-contrast="true"] .progress-summary > span,
+html[data-high-contrast="true"] .dashboard-empty,
+html[data-high-contrast="true"] .recent-completion,
+html[data-high-contrast="true"] .recent-scores,
+html[data-high-contrast="true"] .lesson-card p,
+html[data-high-contrast="true"] .my-learning-lesson p,
+html[data-high-contrast="true"] .accessibility-dialog p,
+html[data-high-contrast="true"] .accessibility-help,
+html[data-high-contrast="true"] .selection-hint,
+html[data-high-contrast="true"] .reassurance,
+html[data-high-contrast="true"] .answer-prompt,
+html[data-high-contrast="true"] .results-breakdown dt {
+    color: #f2f2f2;
+}
+
+html[data-high-contrast="true"] a,
+html[data-high-contrast="true"] .site-nav,
+html[data-high-contrast="true"] .site-nav a,
+html[data-high-contrast="true"] .text-link,
+html[data-high-contrast="true"] .back-link,
+html[data-high-contrast="true"] .welcome-bottom a,
+html[data-high-contrast="true"] .nav-cta,
+html[data-high-contrast="true"] .button-quiet {
+    color: #ffeb00;
+}
+
+html[data-high-contrast="true"] .button-primary,
+html[data-high-contrast="true"] .button-dark {
+    border: 2px solid #ffeb00;
+    background: #ffeb00;
+    color: #000;
+    box-shadow: none;
+}
+
+html[data-high-contrast="true"] .nav-cta,
+html[data-high-contrast="true"] .accessibility-button,
+html[data-high-contrast="true"] .accessibility-close,
+html[data-high-contrast="true"] .text-size-options span {
+    border-color: #fff;
+    background: #101010;
+    color: #fff;
+}
+
+html[data-high-contrast="true"] .nav-cta.is-current,
+html[data-high-contrast="true"] .site-nav a.is-current,
+html[data-high-contrast="true"] .text-size-options input:checked + span {
+    border: 2px solid #ffeb00;
+    background: #242424;
+    color: #ffeb00;
+}
+
+html[data-high-contrast="true"] .answer-option[aria-pressed="true"] { border: 4px solid #ffeb00; }
+html[data-high-contrast="true"] .answer-option.is-correct,
+html[data-high-contrast="true"] .feedback-correct { border: 3px solid #00ff8c; background: #101010; color: #00ff8c; }
+html[data-high-contrast="true"] .answer-option.is-incorrect,
+html[data-high-contrast="true"] .feedback-incorrect { border: 3px solid #ff827a; background: #101010; color: #ffaaa4; }
+html[data-high-contrast="true"] .my-learning-status { background: #101010; }
+html[data-high-contrast="true"] .my-learning-status.is-completed { border-color: #00ff8c; color: #00ff8c; }
+html[data-high-contrast="true"] .my-learning-status.is-not-completed,
+html[data-high-contrast="true"] .my-learning-status.is-unavailable { border-color: #fff; color: #fff; }
+html[data-high-contrast="true"] .button:disabled { border: 2px solid #aaa; background: #222; color: #fff; opacity: 1; }
+html[data-high-contrast="true"] .answer-state { display: inline-block; padding: 0.1rem 0.35rem; border: 1px solid currentColor; border-radius: 0.25rem; }
+html[data-high-contrast="true"] .dashboard-progress-track,
+html[data-high-contrast="true"] .category-progress-track,
+html[data-high-contrast="true"] .my-learning-progress-track,
+html[data-high-contrast="true"] .question-progress { border: 1px solid #fff; background: #222; }
+html[data-high-contrast="true"] .dashboard-progress-track span,
+html[data-high-contrast="true"] .category-progress-track span,
+html[data-high-contrast="true"] .my-learning-progress-track span,
+html[data-high-contrast="true"] .question-progress span { background: #ffeb00; }
+html[data-high-contrast="true"] :focus-visible { outline: 4px solid #ffeb00; outline-offset: 4px; box-shadow: 0 0 0 2px #000; }
+
+html[data-reduce-motion="true"] *,
+html[data-reduce-motion="true"] *::before,
+html[data-reduce-motion="true"] *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .site-header { flex-wrap: wrap; gap: 0.55rem; padding-block: 0.65rem; }
+    .site-nav { order: 3; width: 100%; justify-content: space-between; }
+    .accessibility-button { min-height: 2.5rem; padding-inline: 0.7rem; }
+}
+
+@media (max-width: 360px) {
+    .site-nav { gap: 0.4rem; font-size: 0.68rem; }
+    .nav-cta { padding-inline: 0.5rem; }
+    .accessibility-button { font-size: 0.76rem; }
+}

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Little Learners makes foundational math fun, simple, and accessible for everyone.">
+    <meta name="theme-color" content="#f5f8f2">
+    <title>Little Learners | Learn, Explore, Grow</title>
+    <script src="js/utils/accessibility-preferences.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/accessibility.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <script defer src="js/data/lessons.js"></script>
+    <script defer src="js/data/questions.js"></script>
+    <script defer src="js/navigation.js"></script>
+    <script defer src="js/utils/validation.js"></script>
+    <script defer src="js/features/scoring.js"></script>
+    <script defer src="js/features/activities.js"></script>
+    <script defer src="js/utils/storage.js"></script>
+    <script defer src="js/main.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <header class="site-header">
+        <a class="brand" href="#welcome" data-screen-link aria-label="Little Learners home">
+            <span class="brand-mark" aria-hidden="true">✳</span>
+            <span>little learners<span class="brand-period">.</span></span>
+        </a>
+        <nav class="site-nav" aria-label="Main navigation">
+            <a href="#dashboard" data-screen-link>Dashboard</a>
+            <a href="#explore" data-screen-link>Explore</a>
+            <a class="nav-cta" href="#my-learning" data-screen-link>Let’s learn <span aria-hidden="true">↗</span></a>
+        </nav>
+        <button class="accessibility-button" type="button" data-open-accessibility aria-haspopup="dialog" aria-controls="accessibility-dialog">Accessibility</button>
+    </header>
+
+    <dialog class="accessibility-dialog" id="accessibility-dialog" aria-labelledby="accessibility-title" aria-describedby="accessibility-description">
+        <div class="accessibility-dialog-heading">
+            <div><p class="eyebrow">MAKE IT COMFORTABLE</p><h2 id="accessibility-title">Accessibility settings</h2></div>
+            <button class="accessibility-close" type="button" data-close-accessibility aria-label="Close accessibility settings">Close</button>
+        </div>
+        <p id="accessibility-description">Choose the settings that help you learn comfortably. Changes apply right away.</p>
+        <form class="accessibility-controls">
+            <fieldset>
+                <legend>Text size</legend>
+                <p class="accessibility-help">Choose a size that is easy to read.</p>
+                <div class="text-size-options">
+                    <label><input type="radio" name="textSize" value="default"><span>Default</span></label>
+                    <label><input type="radio" name="textSize" value="larger"><span>Larger</span></label>
+                    <label><input type="radio" name="textSize" value="largest"><span>Largest</span></label>
+                </div>
+            </fieldset>
+            <fieldset class="accessibility-toggle-fieldset">
+                <legend>High contrast</legend>
+                <p class="accessibility-help">Make words, buttons, and cards easier to tell apart.</p>
+                <label class="accessibility-toggle"><input type="checkbox" name="highContrast"><span>Turn on high contrast</span></label>
+            </fieldset>
+            <fieldset class="accessibility-toggle-fieldset">
+                <legend>Reduced motion</legend>
+                <p class="accessibility-help">Use less movement and animation. Your device setting is always respected.</p>
+                <label class="accessibility-toggle"><input type="checkbox" name="reduceMotion"><span>Turn on reduced motion</span></label>
+            </fieldset>
+        </form>
+        <p class="accessibility-storage-status" data-accessibility-status role="status" aria-live="polite" aria-atomic="true"></p>
+        <div class="accessibility-dialog-actions"><button class="button button-primary" type="button" data-close-accessibility>Done</button></div>
+    </dialog>
+
+    <main id="main-content" tabindex="-1">
+        <div class="visually-hidden" data-quiz-announcement aria-live="polite" aria-atomic="true"></div>
+        <section class="screen welcome-screen" id="welcome" data-screen>
+            <div class="welcome-layout">
+                <div class="welcome-copy">
+                    <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> BIG DISCOVERIES START SMALL</p>
+                    <h1>Math is a little more <span class="text-highlight">magical</span> here.</h1>
+                    <p class="hero-description">A happy place to count, discover shapes, and grow your confidence—one little step at a time.</p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#dashboard" data-screen-link>Start learning <span aria-hidden="true">→</span></a>
+                        <p class="gentle-note"><span aria-hidden="true">✦</span> Made for every kind of learner</p>
+                    </div>
+                    <div class="learner-note">
+                        <div class="avatar-stack" aria-hidden="true"><span>😊</span><span>🌱</span><span>⭐</span></div>
+                        <p><strong>A bright little space</strong><br>to learn at your own pace.</p>
+                    </div>
+                </div>
+
+                <div class="hero-art" aria-label="Illustration of colorful numbers, stars, and a smiling flower">
+                    <span class="float float-star" aria-hidden="true">✦</span>
+                    <span class="float float-sparkle" aria-hidden="true">✳</span>
+                    <span class="float float-heart" aria-hidden="true">♥</span>
+                    <div class="art-sun" aria-hidden="true"></div>
+                    <div class="art-card art-card-number"><span>1</span><span>2</span><span>3</span></div>
+                    <div class="art-flower" aria-hidden="true"><span class="flower-face">☺</span></div>
+                    <div class="art-ground" aria-hidden="true"></div>
+                    <span class="art-caption">Look how far you can grow!</span>
+                </div>
+            </div>
+            <div class="welcome-bottom">
+                <span>CURIOUS MINDS WELCOME</span>
+                <a href="#dashboard" data-screen-link>Take a peek inside <span aria-hidden="true">↓</span></a>
+            </div>
+        </section>
+
+        <section class="screen dashboard-screen" id="dashboard" data-screen hidden>
+            <div class="page-container">
+                <div class="dashboard-welcome">
+                    <div>
+                        <p class="eyebrow">YOUR LITTLE LEARNING GARDEN</p>
+                        <h1>Hi, curious learner <span aria-hidden="true">🌼</span></h1>
+                        <p>Every big idea starts with a little question. What shall we explore today?</p>
+                    </div>
+                </div>
+
+                <div class="progress-strip" aria-label="Overall learning progress">
+                    <div class="progress-copy"><span class="progress-icon" aria-hidden="true">✦</span><div><strong>Your learning garden is growing</strong><p>Every lesson you complete is a little step forward.</p></div></div>
+                    <div class="progress-summary" data-overall-progress aria-live="polite"></div>
+                </div>
+                <section class="recent-activity-section" aria-labelledby="recent-activity-title">
+                    <div class="section-heading"><div><p class="eyebrow">YOUR LATEST STEPS</p><h2 id="recent-activity-title">Recent learning</h2></div></div>
+                    <div data-recent-activity></div>
+                </section>
+
+                <section class="dashboard-next-step" aria-label="Continue learning">
+                    <article class="next-step-card"><span class="next-step-star" aria-hidden="true">✦</span><div data-continue-learning></div></article>
+                </section>
+            </div>
+        </section>
+
+        <section class="screen explore-screen" id="explore" data-screen hidden>
+            <div class="page-container">
+                <a class="back-link" href="#dashboard" data-screen-link><span aria-hidden="true">←</span> Dashboard</a>
+                <header class="explore-heading">
+                    <p class="eyebrow">PICK YOUR PATH</p>
+                    <h1>What sounds fun?</h1>
+                    <p>Explore a learning path and choose what you would like to study.</p>
+                </header>
+                <div class="category-grid" data-explore-view></div>
+            </div>
+        </section>
+
+        <section class="screen my-learning-screen" id="my-learning" data-screen hidden>
+            <div class="page-container" data-my-learning-view></div>
+        </section>
+
+        <section class="screen category-screen" id="category" data-screen hidden>
+            <div class="page-container" data-category-view></div>
+        </section>
+
+        <section class="screen lesson-screen" id="lesson" data-screen hidden>
+            <div class="page-container lesson-container" data-lesson-view></div>
+        </section>
+
+        <section class="screen activity-screen" id="activity" data-screen hidden>
+            <div class="page-container activity-container" data-activity-view></div>
+        </section>
+
+        <section class="screen results-screen" id="results" data-screen hidden>
+            <div class="results-card" data-results-view>
+                <div class="celebration-art" aria-hidden="true"><span class="celebration-spark spark-one">✦</span><span class="celebration-spark spark-two">✳</span><span class="celebration-medal">🌟</span><span class="celebration-confetti">·　✦　·</span></div>
+                <div data-results-content></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <a class="footer-brand" href="#welcome" data-screen-link><span aria-hidden="true">✳</span> little learners<span class="brand-period">.</span></a>
+        <p>Making learning simple, fun, and accessible for everyone.</p>
+        <span class="footer-sun" aria-hidden="true">☀</span>
+    </footer>
+</body>
+</html>
