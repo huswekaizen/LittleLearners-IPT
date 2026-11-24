@@ -72,6 +72,58 @@ window.LittleLearnersData = {
                         ]
                     },
                     practicePrompt: "Point to the apples one at a time. How many are there?",
+                    learn: {
+                        title: "Count each object once",
+                        introduction: "When we count, we say one number for each object. We touch or point to each object one time.",
+                        instructions: "Point to one apple at a time. Say 1, 2, 3, 4. Stop when each apple has a number.",
+                        objectives: [
+                            "Match one number to each object.",
+                            "Count each object only once.",
+                            "Say how many objects there are altogether."
+                        ],
+                        examples: [
+                            {
+                                id: "apple-one-to-one",
+                                label: "One number for each apple",
+                                groups: [
+                                    { items: ["🍎", "🍎", "🍎", "🍎"], caption: "Point once to each of the four apples." }
+                                ]
+                            },
+                            {
+                                id: "blocks-one-to-one",
+                                label: "Count three toy blocks",
+                                groups: [
+                                    { items: ["🧱", "🧱", "🧱"], caption: "Say one, two, three as you point." }
+                                ]
+                            }
+                        ]
+                    },
+                    flashcards: [
+                        {
+                            id: "apple-count-once",
+                            label: "One number for each apple",
+                            description: "Point to each apple once as you count.",
+                            accessibleText: "Four apples in a row. Point to each apple one time and say one, two, three, four.",
+                            image: {
+                                kind: "groups",
+                                groups: [{ items: ["🍎", "🍎", "🍎", "🍎"], caption: "Four apples. Count each one once." }]
+                            },
+                            concept: "one-to-one counting",
+                            difficulty: "beginner"
+                        },
+                        {
+                            id: "star-count-total",
+                            label: "The last number tells how many",
+                            description: "Count each star once. The last number is the total.",
+                            accessibleText: "Five stars in one group. Count one, two, three, four, five. There are five stars altogether.",
+                            image: {
+                                kind: "groups",
+                                groups: [{ items: ["⭐", "⭐", "⭐", "⭐", "⭐"], caption: "Five stars altogether." }]
+                            },
+                            concept: "cardinality",
+                            difficulty: "beginner"
+                        }
+                    ],
                     questionIds: ["count-objects-one", "count-objects-two"]
                 },
                 {
@@ -87,6 +139,73 @@ window.LittleLearnersData = {
                         ]
                     },
                     practicePrompt: "Say 1, 2, 3. What number comes next?",
+                    learn: {
+                        title: "Numbers go in order",
+                        introduction: "Counting numbers have a steady order. Each new step is one more than the step before.",
+                        instructions: "Start at 1. Point to each number and say it in order. Find the number that comes next.",
+                        objectives: [
+                            "Say the numbers from 1 to 5 in order.",
+                            "Find the number that comes after another number.",
+                            "Find a missing number in a short count."
+                        ],
+                        examples: [
+                            {
+                                id: "number-path-one-to-five",
+                                label: "Take one counting step at a time",
+                                groups: [
+                                    { items: ["1", "2", "3", "4", "5"], caption: "Each number comes after the one before it." }
+                                ]
+                            },
+                            {
+                                id: "missing-three",
+                                label: "Find the missing number",
+                                groups: [
+                                    { items: ["1", "2", "?", "4", "5"], caption: "Three comes after two and before four." }
+                                ]
+                            }
+                        ]
+                    },
+                    flashcards: [
+                        {
+                            id: "counting-path",
+                            label: "Numbers from one to five",
+                            description: "Follow the numbers one step at a time.",
+                            accessibleText: "Five numbers in a row: one, two, three, four, five. Each number is one step after the number before it.",
+                            image: {
+                                kind: "groups",
+                                groups: [{ items: ["1", "2", "3", "4", "5"], caption: "One, two, three, four, five." }]
+                            },
+                            concept: "counting order",
+                            difficulty: "beginner"
+                        },
+                        {
+                            id: "one-more-after-three",
+                            label: "What comes after three?",
+                            description: "Count one more step after three.",
+                            accessibleText: "The number three points to the number four. Four comes after three in the counting order.",
+                            image: {
+                                kind: "groups",
+                                groups: [
+                                    { items: ["3"], caption: "Three" },
+                                    { symbolBefore: "→", items: ["4"], caption: "One more: four" }
+                                ]
+                            },
+                            concept: "next number",
+                            difficulty: "beginner"
+                        },
+                        {
+                            id: "missing-number-three",
+                            label: "Fill the number gap",
+                            description: "Find the number between two and four.",
+                            accessibleText: "The row shows one, two, a blank, four, five. Three belongs in the blank between two and four.",
+                            image: {
+                                kind: "groups",
+                                groups: [{ items: ["1", "2", "?", "4", "5"], caption: "Three fills the gap." }]
+                            },
+                            concept: "missing number",
+                            difficulty: "beginner"
+                        }
+                    ],
                     questionIds: ["count-sequence-one", "count-sequence-two"]
                 }
             ]

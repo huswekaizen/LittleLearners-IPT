@@ -125,6 +125,10 @@ svg {
     font-weight: 700;
 }
 
+.menu-toggle {
+    display: none;
+}
+
 .site-nav a:not(.nav-cta):hover,
 .back-link:hover {
     color: var(--color-primary-dark);

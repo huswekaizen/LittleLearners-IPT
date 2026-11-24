@@ -54,6 +54,15 @@ function currentNavigationParent() {
     return currentLink.getAttribute("href").replace(/^#/, "");
 }
 
+function setMobileMenuOpen(isOpen) {
+    const toggle = document.querySelector("[data-nav-toggle]");
+    const navigation = document.getElementById("site-navigation");
+    if (!toggle || !navigation) return;
+    toggle.setAttribute("aria-expanded", String(isOpen));
+    toggle.setAttribute("aria-label", isOpen ? "Close navigation menu" : "Open navigation menu");
+    navigation.classList.toggle("is-open", isOpen);
+}
+
 function showRoute(route, shouldFocus) {
     const screens = document.querySelectorAll("[data-screen]");
     const target = document.getElementById(route.screen);
@@ -62,6 +71,7 @@ function showRoute(route, shouldFocus) {
         return false;
     }
 
+    setMobileMenuOpen(false);
     document.dispatchEvent(new CustomEvent("littlelearners:navigate", { detail: route }));
     if (route.redirectTo) {
         const redirectedRoute = parseRoute(route.redirectTo);
@@ -101,8 +111,17 @@ function showRoute(route, shouldFocus) {
 }
 
 document.addEventListener("click", function (event) {
+    const menuToggle = event.target.closest("[data-nav-toggle]");
+    if (menuToggle) {
+        setMobileMenuOpen(menuToggle.getAttribute("aria-expanded") !== "true");
+        return;
+    }
+
     const link = event.target.closest("[data-screen-link]");
     if (!link) {
+        const clickedInMenu = event.target.closest("#site-navigation");
+        const clickedInDialog = event.target.closest("#accessibility-dialog");
+        if (!clickedInMenu && !clickedInDialog) setMobileMenuOpen(false);
         return;
     }
 
@@ -115,6 +134,16 @@ document.addEventListener("click", function (event) {
         const destinationRoute = parseRoute(destination);
         destinationRoute.navParent = resolveNavigationParent(destinationRoute, route.redirectTo ? null : route.navParent);
         window.history.pushState({ navParent: destinationRoute.navParent }, "", destination);
+    }
+});
+
+document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && document.querySelector("dialog[open]")) return;
+    const toggle = document.querySelector("[data-nav-toggle]");
+    if (event.key === "Escape" && toggle && toggle.getAttribute("aria-expanded") === "true") {
+        event.preventDefault();
+        setMobileMenuOpen(false);
+        toggle.focus();
     }
 });
 

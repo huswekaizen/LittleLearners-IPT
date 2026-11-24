@@ -1,5 +1,9 @@
 const learningData = window.LittleLearnersData;
 let lastCompletion = null;
+let discoverState = null;
+let activeLessonContext = null;
+
+window.LittleLearnersContentValidation.validate(learningData.categories, learningData.questions);
 
 function escapeHtml(value) {
     return String(value).replace(/[&<>"']/g, function (character) {
@@ -377,7 +381,172 @@ function renderCategory(category) {
         '</section></div>';
 }
 
+function hasFlashcardText(value) {
+    return typeof value === "string" && value.trim().length > 0;
+}
+
+function isValidFlashcardImage(image) {
+    if (!image || typeof image !== "object" || Array.isArray(image)) return false;
+    if (image.kind === "symbol") {
+        return hasFlashcardText(image.value) && hasFlashcardText(image.alt) &&
+            (image.repeat === undefined || (Number.isInteger(image.repeat) && image.repeat > 0));
+    }
+    if (image.kind === "image") {
+        return hasFlashcardText(image.src) && !/^[a-z][a-z0-9+.-]*:/i.test(image.src) &&
+            image.src.indexOf("//") !== 0 && hasFlashcardText(image.alt);
+    }
+    if (image.kind === "groups") {
+        return Array.isArray(image.groups) && image.groups.length > 0 && image.groups.every(function (group) {
+            return group && typeof group === "object" && Array.isArray(group.items) &&
+                group.items.every(function (item) { return typeof item === "string"; }) &&
+                hasFlashcardText(group.caption) &&
+                (group.symbolBefore === undefined || hasFlashcardText(group.symbolBefore));
+        });
+    }
+    return false;
+}
+
+function getFlashcards(lesson) {
+    if (!lesson || !Array.isArray(lesson.flashcards)) return [];
+    const ids = new Set();
+    return lesson.flashcards.filter(function (card) {
+        if (!card || typeof card !== "object" || Array.isArray(card) ||
+            !hasFlashcardText(card.id) || ids.has(card.id) || !hasFlashcardText(card.label) ||
+            !hasFlashcardText(card.description) || !hasFlashcardText(card.accessibleText)) return false;
+        ids.add(card.id);
+        return true;
+    });
+}
+
+function renderFlashcardVisual(card) {
+    const image = card.image;
+    if (!isValidFlashcardImage(image)) return "";
+    if (image.kind === "symbol") {
+        const repetitions = image.repeat || 1;
+        const symbols = Array.from({ length: repetitions }, function () {
+            return '<span aria-hidden="true">' + escapeHtml(image.value) + '</span>';
+        }).join("");
+        return '<div class="discover-visual discover-symbol-visual" role="img" aria-label="' +
+            escapeHtml(image.alt) + '">' + symbols + '</div>';
+    }
+    if (image.kind === "image") {
+        return '<div class="discover-visual"><img class="discover-visual-image" src="' +
+            escapeHtml(image.src) + '" alt="' + escapeHtml(image.alt) + '"></div>';
+    }
+    return '<div class="discover-visual discover-group-visual" role="img" aria-label="' +
+        escapeHtml(card.accessibleText) + '">' + renderGroups(image.groups, "visual-groups") + '</div>';
+}
+
+function canRenderLearnData(learn) {
+    return Boolean(learn && typeof learn.title === "string" && learn.title.trim() &&
+        typeof learn.introduction === "string" && learn.introduction.trim() &&
+        typeof learn.instructions === "string" && learn.instructions.trim() &&
+        Array.isArray(learn.objectives) && learn.objectives.length > 0 &&
+        learn.objectives.every(function (objective) { return typeof objective === "string" && objective.trim(); }) &&
+        Array.isArray(learn.examples) && learn.examples.length > 0 &&
+        learn.examples.every(function (example) {
+            return example && typeof example.id === "string" && typeof example.label === "string" &&
+                Array.isArray(example.groups) && example.groups.length > 0 &&
+                example.groups.every(function (group) {
+                    return group && Array.isArray(group.items) &&
+                        group.items.every(function (item) { return typeof item === "string"; }) &&
+                        typeof group.caption === "string" &&
+                        (group.symbolBefore === undefined || typeof group.symbolBefore === "string");
+                });
+        }));
+}
+
+function renderLearn(category, lesson) {
+    const learn = lesson.learn;
+    const hasCards = getFlashcards(lesson).length > 0;
+    const objectives = learn.objectives.map(function (objective) {
+        return "<li>" + escapeHtml(objective) + "</li>";
+    }).join("");
+    const examples = learn.examples.map(function (example, index) {
+        const visualDescription = [example.label].concat(example.groups.map(function (group) {
+            return group.caption;
+        })).join(". ");
+        return '<article class="learn-example-card" aria-labelledby="learn-example-title-' + index + '">' +
+            '<h3 id="learn-example-title-' + index + '">' + escapeHtml(example.label) + '</h3>' +
+            '<div class="learn-example-visual" role="img" aria-label="' + escapeHtml(visualDescription) + '">' +
+            renderGroups(example.groups, "visual-groups") + '</div></article>';
+    }).join("");
+
+    document.querySelector("[data-lesson-view]").innerHTML =
+        '<a class="back-link" href="#category/' + encodeURIComponent(category.id) + '" data-screen-link>' +
+        '<span aria-hidden="true">←</span> Back to ' + escapeHtml(category.shortTitle) + '</a>' +
+        '<header class="learn-page-heading"><p class="eyebrow">' + escapeHtml(category.shortTitle.toUpperCase()) +
+        ' · LESSON: ' + escapeHtml(lesson.title) + '</p><h1>' + escapeHtml(learn.title) + '</h1>' +
+        '<p class="learn-introduction">' + escapeHtml(learn.introduction) + '</p></header>' +
+        '<div class="learn-content"><div class="learn-guidance">' +
+        '<section class="instruction-panel learn-instructions" aria-labelledby="learn-instructions-title">' +
+        '<span class="instruction-icon" aria-hidden="true">👆</span><div><h2 id="learn-instructions-title">Let’s try it together</h2>' +
+        '<p>' + escapeHtml(learn.instructions) + '</p></div></section>' +
+        '<section class="lesson-objectives learn-objectives" aria-labelledby="learn-objectives-title">' +
+        '<h2 id="learn-objectives-title">We will learn to…</h2><ul>' + objectives + '</ul></section></div>' +
+        '<section class="learn-examples-panel" aria-labelledby="learn-examples-title">' +
+        '<p class="eyebrow">LOOK AND LEARN</p><h2 id="learn-examples-title">Let’s look together</h2>' +
+        '<div class="learn-example-list">' + examples + '</div></section></div>' +
+        '<section class="learn-next-steps" aria-label="Next learning phases">' +
+        '<div class="learn-discover-placeholder"><span class="learn-phase-number" aria-hidden="true">2</span>' +
+        '<div><p class="eyebrow">NEXT PHASE · DISCOVER</p><h2>' + (hasCards ? 'Explore with flashcards' : 'Flashcards are not available yet') + '</h2>' +
+        '<p>' + (hasCards ? 'Turn over each card and discover a little more.' : 'You can still try the activity when you are ready.') + '</p></div></div>' +
+        '<div class="learn-phase-actions">' + (hasCards
+            ? '<button class="button button-quiet" type="button" data-open-discover>Explore flashcards <span aria-hidden="true">→</span></button>'
+            : '') +
+        '<a class="button button-primary learn-practice-link" href="#activity/' + encodeURIComponent(category.id) + '/' +
+        encodeURIComponent(lesson.id) + '" data-screen-link>Try a little activity <span aria-hidden="true">→</span></a></div></section>';
+}
+
+function renderDiscover(category, lesson, focusTarget, announcement) {
+    const cards = getFlashcards(lesson);
+    if (!cards.length) {
+        discoverState = null;
+        renderLesson(category, lesson);
+        return;
+    }
+    if (!discoverState || discoverState.categoryId !== category.id || discoverState.lessonId !== lesson.id ||
+        discoverState.index < 0 || discoverState.index >= cards.length) {
+        discoverState = { categoryId: category.id, lessonId: lesson.id, index: 0, revealed: false };
+    }
+
+    const card = cards[discoverState.index];
+    const view = document.querySelector("[data-lesson-view]");
+    const answer = discoverState.revealed
+        ? '<section class="discover-answer" aria-labelledby="discover-answer-title"><h2 id="discover-answer-title">Here is what we learned</h2><p>' +
+            escapeHtml(card.accessibleText) + '</p></section>'
+        : '';
+    view.innerHTML = '<div class="discover-heading"><div><p class="eyebrow">' + escapeHtml(category.shortTitle.toUpperCase()) +
+        ' · DISCOVER</p><h1 id="discover-card-title" tabindex="-1">' + escapeHtml(card.label) + '</h1>' +
+        '<p class="discover-description">' + escapeHtml(card.description) + '</p></div>' +
+        '<p class="discover-position" aria-label="Card ' + (discoverState.index + 1) + ' of ' + cards.length + '">Card <strong>' +
+        (discoverState.index + 1) + '</strong> of <strong>' + cards.length + '</strong></p></div>' +
+        '<article class="discover-card" aria-labelledby="discover-card-title">' + renderFlashcardVisual(card) + answer +
+        '<button class="button button-primary discover-reveal" type="button" data-discover-reveal aria-expanded="' +
+        String(discoverState.revealed) + '">' + (discoverState.revealed ? 'Hide answer' : 'Reveal answer') + '</button></article>' +
+        '<div class="discover-card-controls" role="group" aria-label="Flashcard controls">' +
+        '<button class="button button-quiet" type="button" data-discover-previous ' + (discoverState.index === 0 ? 'disabled' : '') + '>Previous card</button>' +
+        '<button class="button button-quiet" type="button" data-discover-next ' + (discoverState.index === cards.length - 1 ? 'disabled' : '') + '>Next card</button></div>' +
+        '<div class="discover-bottom-actions"><button class="back-link discover-back" type="button" data-return-learn>← Back to Learn</button>' +
+        '<a class="button button-primary" href="#activity/' + encodeURIComponent(category.id) + '/' + encodeURIComponent(lesson.id) +
+        '" data-screen-link>Continue to Practice <span aria-hidden="true">→</span></a></div>';
+
+    if (focusTarget === "heading") {
+        const heading = view.querySelector("#discover-card-title");
+        if (heading) heading.focus();
+    } else if (focusTarget === "reveal") {
+        const revealButton = view.querySelector("[data-discover-reveal]");
+        if (revealButton) revealButton.focus();
+    }
+    if (announcement) announceQuiz(announcement);
+}
+
 function renderLesson(category, lesson) {
+    if (canRenderLearnData(lesson.learn)) {
+        renderLearn(category, lesson);
+        return;
+    }
+
     const objectives = lesson.objectives.map(function (objective) {
         return "<li>" + escapeHtml(objective) + "</li>";
     }).join("");
@@ -448,8 +617,12 @@ function renderResults(completion) {
 
 document.addEventListener("littlelearners:navigate", function (event) {
     const route = event.detail;
+    discoverState = null;
     const category = findCategory(route.categoryId);
     const lesson = findLesson(category, route.lessonId);
+    activeLessonContext = route.screen === "lesson" && category && lesson
+        ? { categoryId: category.id, lessonId: lesson.id }
+        : null;
 
     if (route.screen === "dashboard") {
         renderDashboard();
@@ -481,6 +654,53 @@ document.addEventListener("littlelearners:navigate", function (event) {
 });
 
 document.addEventListener("click", function(event) {
+    const openDiscover = event.target.closest("[data-open-discover]");
+    if (openDiscover) {
+        const category = findCategory(activeLessonContext && activeLessonContext.categoryId);
+        const lesson = findLesson(category, activeLessonContext && activeLessonContext.lessonId);
+        if (!category || !lesson) return;
+        discoverState = { categoryId: category.id, lessonId: lesson.id, index: 0, revealed: false };
+        const firstCard = getFlashcards(lesson)[0];
+        renderDiscover(category, lesson, "heading", "Discover card 1 of " + getFlashcards(lesson).length + ". " + firstCard.label + ".");
+        return;
+    }
+    const returnToLearn = event.target.closest("[data-return-learn]");
+    if (returnToLearn) {
+        const category = findCategory(discoverState && discoverState.categoryId);
+        const lesson = findLesson(category, discoverState && discoverState.lessonId);
+        if (!category || !lesson) return;
+        discoverState = null;
+        renderLesson(category, lesson);
+        const view = document.querySelector("[data-lesson-view]");
+        const learnButton = view.querySelector("[data-open-discover]");
+        if (learnButton) learnButton.focus();
+        announceQuiz("Returned to the Learn phase for " + lesson.title + ".");
+        return;
+    }
+    const revealFlashcard = event.target.closest("[data-discover-reveal]");
+    const previousFlashcard = event.target.closest("[data-discover-previous]");
+    const nextFlashcard = event.target.closest("[data-discover-next]");
+    if (revealFlashcard || previousFlashcard || nextFlashcard) {
+        const category = findCategory(discoverState && discoverState.categoryId);
+        const lesson = findLesson(category, discoverState && discoverState.lessonId);
+        const cards = getFlashcards(lesson);
+        if (!category || !lesson || !cards.length || !discoverState) return;
+        if (revealFlashcard) {
+            discoverState.revealed = !discoverState.revealed;
+            const card = cards[discoverState.index];
+            renderDiscover(category, lesson, "reveal", discoverState.revealed
+                ? card.accessibleText
+                : "Answer hidden for " + card.label + ".");
+        } else {
+            const nextIndex = discoverState.index + (nextFlashcard ? 1 : -1);
+            if (nextIndex < 0 || nextIndex >= cards.length) return;
+            discoverState.index = nextIndex;
+            discoverState.revealed = false;
+            const card = cards[nextIndex];
+            renderDiscover(category, lesson, "heading", "Card " + (nextIndex + 1) + " of " + cards.length + ". " + card.label + ".");
+        }
+        return;
+    }
     const answer=event.target.closest('[data-answer-option]');
     if(answer){window.LittleLearnersActivity.select(answer.dataset.answerOption);renderActivity(answer.dataset.answerOption);return;}
     if(event.target.closest('[data-submit]')){

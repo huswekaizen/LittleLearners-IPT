@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="css/responsive.css">
     <script defer src="js/data/lessons.js"></script>
     <script defer src="js/data/questions.js"></script>
+    <script defer src="js/utils/content-validation.js"></script>
     <script defer src="js/navigation.js"></script>
     <script defer src="js/utils/validation.js"></script>
     <script defer src="js/features/scoring.js"></script>
@@ -29,12 +30,15 @@
             <span class="brand-mark" aria-hidden="true">✳</span>
             <span>little learners<span class="brand-period">.</span></span>
         </a>
-        <nav class="site-nav" aria-label="Main navigation">
+        <button class="menu-toggle" type="button" data-nav-toggle aria-controls="site-navigation" aria-expanded="false" aria-label="Open navigation menu">
+            <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+        </button>
+        <nav class="site-nav" id="site-navigation" aria-label="Main navigation">
             <a href="#dashboard" data-screen-link>Dashboard</a>
             <a href="#explore" data-screen-link>Explore</a>
             <a class="nav-cta" href="#my-learning" data-screen-link>Let’s learn <span aria-hidden="true">↗</span></a>
+            <button class="accessibility-button" type="button" data-open-accessibility aria-haspopup="dialog" aria-controls="accessibility-dialog">Accessibility</button>
         </nav>
-        <button class="accessibility-button" type="button" data-open-accessibility aria-haspopup="dialog" aria-controls="accessibility-dialog">Accessibility</button>
     </header>
 
     <dialog class="accessibility-dialog" id="accessibility-dialog" aria-labelledby="accessibility-title" aria-describedby="accessibility-description">
@@ -65,7 +69,6 @@
             </fieldset>
         </form>
         <p class="accessibility-storage-status" data-accessibility-status role="status" aria-live="polite" aria-atomic="true"></p>
-        <div class="accessibility-dialog-actions"><button class="button button-primary" type="button" data-close-accessibility>Done</button></div>
     </dialog>
 
     <main id="main-content" tabindex="-1">

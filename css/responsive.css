@@ -30,6 +30,10 @@
         gap: 2rem;
     }
 
+    .learn-content {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
     .category-content-grid {
         grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
         gap: 0.8rem;
@@ -42,6 +46,91 @@
     .category-goals-panel,
     .lesson-list-panel {
         padding: 1rem;
+    }
+
+    .site-header {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-rows: auto auto;
+        column-gap: 0.65rem;
+        row-gap: 0.2rem;
+        padding-block: 0.65rem;
+    }
+
+    .brand { grid-column: 1; grid-row: 1; min-width: 0; }
+
+    .menu-toggle {
+        display: inline-flex;
+        width: 2.9rem;
+        min-height: 2.9rem;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 0.27rem;
+        grid-column: 2;
+        grid-row: 1;
+        padding: 0.5rem;
+        border: 1px solid var(--color-line);
+        border-radius: 50%;
+        background: var(--color-surface);
+        color: var(--color-text);
+        cursor: pointer;
+    }
+
+    .menu-toggle span {
+        display: block;
+        width: 1.15rem;
+        height: 2px;
+        border-radius: 2px;
+        background: currentColor;
+        transition: transform 160ms ease, opacity 160ms ease;
+    }
+
+    .menu-toggle[aria-expanded="true"] span:first-child { transform: translateY(0.39rem) rotate(45deg); }
+    .menu-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .menu-toggle[aria-expanded="true"] span:last-child { transform: translateY(-0.39rem) rotate(-45deg); }
+
+    .site-nav {
+        display: none;
+        align-items: stretch;
+        flex-direction: column;
+        grid-column: 1 / -1;
+        grid-row: 2;
+        gap: 0.25rem;
+        width: 100%;
+        padding: 0.5rem 0 0.2rem;
+        font-size: 0.95rem;
+    }
+
+    .site-nav.is-open { display: flex; }
+
+    .site-nav a {
+        display: flex;
+        min-height: 2.75rem;
+        align-items: center;
+        padding: 0.65rem 0.9rem;
+        border-radius: var(--radius-small);
+    }
+
+    .site-nav .nav-cta,
+    .site-nav > .accessibility-button {
+        width: fit-content;
+        max-width: 100%;
+        min-height: 2.75rem;
+        align-self: flex-start;
+        padding: 0.7rem 1.1rem;
+    }
+
+    .site-nav .nav-cta {
+        justify-content: flex-start;
+    }
+
+    .site-nav > .accessibility-button {
+        align-items: center;
+        justify-content: flex-start;
+        border-radius: var(--radius-small);
+        font-size: inherit;
+        text-align: left;
     }
 }
 
@@ -60,12 +149,11 @@
         height: 1.8rem;
     }
 
-    .site-nav {
-        gap: 0.75rem;
-        font-size: 0.78rem;
+    .nav-cta {
+        padding: 0.55rem 0.75rem;
     }
 
-    .nav-cta {
+    .site-nav > .accessibility-button {
         padding: 0.55rem 0.75rem;
     }
 
@@ -106,13 +194,24 @@
         margin: 0 auto;
         transform: scale(0.76);
         transform-origin: center top;
-        width: 125%;
+        width: 100%;
     }
 
     .welcome-bottom {
+        flex-wrap: wrap;
+        gap: 0.5rem 1rem;
         margin-top: -1rem;
         font-size: 0.58rem;
     }
+
+    .my-learning-lesson-heading { flex-wrap: wrap; }
+    .my-learning-lesson-heading > div,
+    .my-learning-category-heading > div,
+    .quiz-heading > div { min-width: 0; flex: 1 1 10rem; }
+
+    .my-learning-lesson h3,
+    .my-learning-category-heading h2,
+    .activity-question h2 { overflow-wrap: anywhere; }
 
     .dashboard-screen {
         padding-top: 2.5rem;
@@ -178,6 +277,17 @@
         gap: 1.25rem;
         padding-top: 2.5rem;
     }
+
+    .learn-page-heading { margin-top: 1.1rem; }
+    .learn-examples-panel { padding: 0.9rem; }
+    .learn-next-steps { align-items: stretch; flex-direction: column; }
+    .learn-practice-link { justify-content: center; }
+    .discover-heading { align-items: flex-start; flex-direction: column; }
+    .discover-card { min-height: 0; }
+    .discover-card-controls,
+    .discover-bottom-actions { width: 100%; }
+    .discover-bottom-actions { align-items: stretch; flex-direction: column; }
+    .discover-bottom-actions > * { justify-content: center; }
 
     .category-content-grid {
         grid-template-columns: 1fr;
@@ -265,12 +375,16 @@
     }
 }
 
-@media (max-width: 360px) {
-    .site-nav {
-        gap: 0.5rem;
-        font-size: 0.72rem;
+@media (max-width: 420px) {
+    .site-header {
+        grid-template-columns: minmax(0, 1fr) auto;
+        row-gap: 0.4rem;
     }
 
+    .site-nav { grid-row: 2; }
+}
+
+@media (max-width: 360px) {
     .welcome-bottom span {
         max-width: 8rem;
     }

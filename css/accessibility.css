@@ -50,6 +50,8 @@ html[data-text-size="largest"] { font-size: 125%; }
     font-weight: 800;
 }
 
+.menu-toggle:focus-visible { outline: 3px solid #236f4b; outline-offset: 3px; }
+
 .accessibility-dialog {
     width: min(38rem, calc(100vw - 2rem));
     max-width: none;
@@ -64,11 +66,22 @@ html[data-text-size="largest"] { font-size: 125%; }
 }
 
 .accessibility-dialog::backdrop { background: rgb(20 35 25 / 55%); }
-.accessibility-dialog-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.accessibility-dialog-heading {
+    position: sticky;
+    z-index: 1;
+    top: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.2rem 0.6rem;
+    background: var(--color-surface);
+}
 .accessibility-dialog-heading .eyebrow { margin-bottom: 0.35rem; }
 .accessibility-dialog h2 { margin: 0; font-size: clamp(1.35rem, 4vw, 1.8rem); line-height: 1.2; }
 .accessibility-dialog > p:not(.eyebrow) { color: var(--color-text-muted); }
-.accessibility-close { min-width: 2.75rem; padding: 0; font-size: 1.4rem; }
+.accessibility-dialog-heading > div { min-width: 0; }
+.accessibility-close { min-width: 2.75rem; min-height: 2.75rem; flex: 0 0 auto; padding: 0.55rem 0.8rem; font-size: 0.85rem; white-space: nowrap; }
 .accessibility-controls { display: grid; gap: 1rem; }
 .accessibility-controls fieldset { min-width: 0; margin: 0; padding: 1rem; border: 1px solid var(--color-line); border-radius: var(--radius-small); }
 .accessibility-controls legend { padding-inline: 0.25rem; font-weight: 800; }
@@ -82,8 +95,6 @@ html[data-text-size="largest"] { font-size: 125%; }
 .accessibility-toggle { display: flex; min-height: 2.8rem; align-items: center; gap: 0.7rem; cursor: pointer; font-weight: 700; }
 .accessibility-toggle input { width: 1.3rem; height: 1.3rem; accent-color: var(--color-primary-dark); }
 .accessibility-storage-status { min-height: 1.4em; margin: 0.8rem 0; color: var(--color-text-muted); font-size: 0.85rem; }
-.accessibility-dialog-actions { display: flex; justify-content: flex-end; }
-
 html[data-high-contrast="true"] {
     color-scheme: dark;
     --color-primary: #ffeb00;
@@ -117,6 +128,14 @@ html[data-high-contrast="true"] .my-learning-lesson,
 html[data-high-contrast="true"] .instruction-panel,
 html[data-high-contrast="true"] .lesson-visual,
 html[data-high-contrast="true"] .practice-callout,
+html[data-high-contrast="true"] .learn-objectives,
+html[data-high-contrast="true"] .learn-examples-panel,
+html[data-high-contrast="true"] .learn-example-card,
+html[data-high-contrast="true"] .learn-example-visual,
+html[data-high-contrast="true"] .learn-next-steps,
+html[data-high-contrast="true"] .discover-position,
+html[data-high-contrast="true"] .discover-card,
+html[data-high-contrast="true"] .discover-visual,
 html[data-high-contrast="true"] .category-note,
 html[data-high-contrast="true"] .my-learning-storage-note,
 html[data-high-contrast="true"] .progress-save-note,
@@ -136,6 +155,8 @@ html[data-high-contrast="true"] .lesson-order,
 html[data-high-contrast="true"] .my-learning-status,
 html[data-high-contrast="true"] .progress-icon,
 html[data-high-contrast="true"] .instruction-icon,
+html[data-high-contrast="true"] .learn-phase-number,
+html[data-high-contrast="true"] .discover-answer,
 html[data-high-contrast="true"] .quiz-illustration,
 html[data-high-contrast="true"] .celebration-art {
     border: 1px solid #fff;
@@ -154,6 +175,9 @@ html[data-high-contrast="true"] .recent-completion,
 html[data-high-contrast="true"] .recent-scores,
 html[data-high-contrast="true"] .lesson-card p,
 html[data-high-contrast="true"] .my-learning-lesson p,
+html[data-high-contrast="true"] .learn-introduction,
+html[data-high-contrast="true"] .learn-discover-placeholder p:not(.eyebrow),
+html[data-high-contrast="true"] .discover-description,
 html[data-high-contrast="true"] .accessibility-dialog p,
 html[data-high-contrast="true"] .accessibility-help,
 html[data-high-contrast="true"] .selection-hint,
@@ -204,6 +228,8 @@ html[data-high-contrast="true"] .answer-option.is-correct,
 html[data-high-contrast="true"] .feedback-correct { border: 3px solid #00ff8c; background: #101010; color: #00ff8c; }
 html[data-high-contrast="true"] .answer-option.is-incorrect,
 html[data-high-contrast="true"] .feedback-incorrect { border: 3px solid #ff827a; background: #101010; color: #ffaaa4; }
+html[data-high-contrast="true"] .discover-answer { border: 3px solid #00ff8c; }
+html[data-high-contrast="true"] .discover-answer h2 { color: #00ff8c; }
 html[data-high-contrast="true"] .my-learning-status { background: #101010; }
 html[data-high-contrast="true"] .my-learning-status.is-completed { border-color: #00ff8c; color: #00ff8c; }
 html[data-high-contrast="true"] .my-learning-status.is-not-completed,
@@ -238,16 +264,4 @@ html[data-reduce-motion="true"] *::after {
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
-}
-
-@media (max-width: 600px) {
-    .site-header { flex-wrap: wrap; gap: 0.55rem; padding-block: 0.65rem; }
-    .site-nav { order: 3; width: 100%; justify-content: space-between; }
-    .accessibility-button { min-height: 2.5rem; padding-inline: 0.7rem; }
-}
-
-@media (max-width: 360px) {
-    .site-nav { gap: 0.4rem; font-size: 0.68rem; }
-    .nav-cta { padding-inline: 0.5rem; }
-    .accessibility-button { font-size: 0.76rem; }
 }
