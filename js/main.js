@@ -226,10 +226,27 @@ function renderContinueLearning(container, recommendation, unavailable) {
         '<a class="button button-dark" href="#lesson/' + encodeURIComponent(category.id) + '/' + encodeURIComponent(lesson.id) + '" data-screen-link>' + escapeHtml(action) + ' <span aria-hidden="true">→</span></a>';
 }
 
+function renderLearningMascot() {
+    return '<img src="assets/images/characters/bo-mascot.png" alt="Bo, the Little Learners bear mascot, waving hello." loading="eager" decoding="async">';
+}
+
+function categoryIllustrationMarkup(categoryId) {
+    const illustrations = {
+        numbers: '<circle class="art-sparkle" cx="21" cy="22" r="6"></circle><rect class="art-number-one" x="22" y="34" width="48" height="78" rx="15"></rect><rect class="art-number-two" x="85" y="24" width="52" height="88" rx="17"></rect><rect class="art-number-three" x="151" y="36" width="48" height="76" rx="15"></rect><text class="art-number-text" x="46" y="88">1</text><text class="art-number-text" x="111" y="82">2</text><text class="art-number-text" x="175" y="88">3</text><circle class="art-dot" cx="207" cy="28" r="7"></circle>',
+        counting: '<g transform="translate(7 13)"><path class="art-apple-red" d="M29 28c-15-15-31-4-27 14 3 18 14 31 27 25 13 6 24-7 27-25 4-18-12-29-27-14z"></path><path class="art-leaf" d="M28 27c-2-11 4-17 13-18-1 9-6 14-13 18z"></path></g><g transform="translate(61 42) scale(.76)"><path class="art-apple-yellow" d="M29 28c-15-15-31-4-27 14 3 18 14 31 27 25 13 6 24-7 27-25 4-18-12-29-27-14z"></path><path class="art-leaf" d="M28 27c-2-11 4-17 13-18-1 9-6 14-13 18z"></path></g><g transform="translate(108 13)"><path class="art-apple-pink" d="M29 28c-15-15-31-4-27 14 3 18 14 31 27 25 13 6 24-7 27-25 4-18-12-29-27-14z"></path><path class="art-leaf" d="M28 27c-2-11 4-17 13-18-1 9-6 14-13 18z"></path></g><g transform="translate(157 42) scale(.76)"><path class="art-apple-green" d="M29 28c-15-15-31-4-27 14 3 18 14 31 27 25 13 6 24-7 27-25 4-18-12-29-27-14z"></path><path class="art-leaf" d="M28 27c-2-11 4-17 13-18-1 9-6 14-13 18z"></path></g>',
+        addition: '<rect class="art-block-coral" x="15" y="26" width="45" height="45" rx="11"></rect><rect class="art-block-orange" x="25" y="78" width="45" height="45" rx="11"></rect><path class="art-plus" d="M78 74h34m-17-17v34"></path><rect class="art-block-teal" x="132" y="26" width="45" height="45" rx="11"></rect><rect class="art-block-blue" x="150" y="78" width="45" height="45" rx="11"></rect><path class="art-join-arrow" d="M60 97h69"></path>',
+        subtraction: '<rect class="art-block-coral" x="10" y="49" width="42" height="43" rx="10"></rect><rect class="art-block-orange" x="57" y="49" width="42" height="43" rx="10"></rect><rect class="art-block-teal" x="104" y="49" width="42" height="43" rx="10"></rect><path class="art-take-arrow" d="M142 70h25m-8-8 8 8-8 8"></path><rect class="art-block-removed" x="174" y="49" width="35" height="43" rx="10"></rect><path class="art-dash" d="M162 42l17-17"></path>',
+        shapes: '<circle class="art-shape-blue" cx="39" cy="64" r="27"></circle><rect class="art-shape-pink" x="81" y="36" width="54" height="54" rx="9"></rect><path class="art-shape-yellow" d="m174 31 31 59h-62z"></path><rect class="art-shape-green" x="25" y="104" width="68" height="24" rx="8"></rect>'
+    };
+    return '<svg class="category-art-illustration category-art-' + escapeHtml(categoryId) + '" viewBox="0 0 220 140" focusable="false" aria-hidden="true">' + (illustrations[categoryId] || illustrations.counting) + '</svg>';
+}
+
 function renderDashboard() {
     const overallView = document.querySelector("[data-overall-progress]");
     const recentView = document.querySelector("[data-recent-activity]");
     const continueView = document.querySelector("[data-continue-learning]");
+    const mascotView = document.querySelector("[data-dashboard-mascot]");
+    if (mascotView) mascotView.innerHTML = renderLearningMascot();
     const loaded = window.LittleLearnersStorage.load();
 
     if (!loaded.writable || !loaded.document) {
@@ -267,10 +284,11 @@ function renderDashboard() {
             const latest = entry.progress.latestAttempt;
             const best = entry.progress.bestAttempt;
             const completedAt = latest.completedAt;
-            return '<li class="recent-activity-card"><div><p class="card-label">' + escapeHtml(entry.category.title) + '</p><h3>' + escapeHtml(entry.lesson.title) + '</h3>' +
-                '<p class="recent-completion">Completed <time datetime="' + escapeHtml(completedAt) + '">' + escapeHtml(dateFormat.format(new Date(completedAt))) + '</time></p></div>' +
-                '<div class="recent-scores"><span>Latest: ' + latest.score + '/' + latest.totalQuestions + ' (' + latest.percentage + '%)</span><span>Best: ' + best.score + '/' + best.totalQuestions + ' (' + best.percentage + '%)</span></div>' +
-                '<a class="text-link" href="#lesson/' + encodeURIComponent(entry.category.id) + '/' + encodeURIComponent(entry.lesson.id) + '" data-screen-link>Review lesson <span aria-hidden="true">→</span></a></li>';
+            return '<li class="recent-activity-card recent-card-' + escapeHtml(entry.category.id) + '"><div class="recent-card-art">' + categoryIllustrationMarkup(entry.category.id) + '</div>' +
+                '<div class="recent-card-content"><div class="recent-card-top"><span class="recent-category-tag">' + escapeHtml(entry.category.title) + '</span><span class="recent-complete-tag"><span aria-hidden="true">&#10003;</span> Completed</span></div>' +
+                '<h3>' + escapeHtml(entry.lesson.title) + '</h3><time class="recent-completion" datetime="' + escapeHtml(completedAt) + '">' + escapeHtml(dateFormat.format(new Date(completedAt))) + '</time>' +
+                '<div class="recent-scores"><span>Latest ' + latest.score + '/' + latest.totalQuestions + ' &#183; ' + latest.percentage + '%</span><span>Best ' + best.score + '/' + best.totalQuestions + ' &#183; ' + best.percentage + '%</span></div>' +
+                '<a class="recent-card-action" href="#lesson/' + encodeURIComponent(entry.category.id) + '/' + encodeURIComponent(entry.lesson.id) + '" data-screen-link>Review lesson</a></div></li>';
         }).join("") + '</ul>';
     }
 
@@ -281,16 +299,16 @@ function renderExplore() {
     const container = document.querySelector("[data-explore-view]");
     const cardColors = ["card-lime", "card-blue", "card-peach", "card-lavender", "card-yellow"];
     container.innerHTML = learningData.categories.map(function (category, index) {
-        return '<article class="category-card ' + cardColors[index % cardColors.length] + '">' +
-            '<div class="category-top"><span class="category-emoji" aria-hidden="true">' + escapeHtml(category.icon) + '</span>' +
-            '<span class="card-arrow" aria-hidden="true">↗</span></div>' +
-            '<p class="card-label">LEARNING PATH</p><h2>' + escapeHtml(category.title) + '</h2>' +
+        return '<a class="category-card ' + cardColors[index % cardColors.length] + '" href="#category/' +
+            encodeURIComponent(category.id) + '" data-screen-link aria-label="Explore ' + escapeHtml(category.title) +
+            ', ' + category.lessons.length + ' lessons">' +
+            '<div class="explore-card-top"><span class="card-label">LEARNING PATH</span><span class="card-arrow" aria-hidden="true">&#8599;</span></div>' +
+            '<span class="category-illustration">' + categoryIllustrationMarkup(category.id) + '</span>' +
+            '<div class="category-card-bottom"><h2 id="explore-category-' + escapeHtml(category.id) + '">' + escapeHtml(category.title) + '</h2>' +
             '<p>' + escapeHtml(category.description) + '</p>' +
-            '<a class="text-link" href="#category/' + encodeURIComponent(category.id) + '" data-screen-link>Explore ' +
-            escapeHtml(category.shortTitle) + ' <span aria-hidden="true">→</span></a></article>';
+            '<span class="category-card-count">' + category.lessons.length + ' little lessons</span></div></a>';
     }).join("");
 }
-
 function renderMyLearning() {
     const container = document.querySelector("[data-my-learning-view]");
     const loaded = window.LittleLearnersStorage.load();

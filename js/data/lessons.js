@@ -28,7 +28,7 @@ window.LittleLearnersData = {
                         ]
                     },
                     practicePrompt: "Point to the number that matches two dots.",
-                    questionIds: ["number-symbols-one", "number-symbols-two"]
+                    questionIds: ["number-symbols-one", "number-symbols-two", "number-symbols-three", "number-symbols-four"]
                 },
                 {
                     id: "number-order",
@@ -43,7 +43,7 @@ window.LittleLearnersData = {
                         ]
                     },
                     practicePrompt: "Start at 1 and point to the number that comes after 3.",
-                    questionIds: ["number-order-one", "number-order-two"]
+                    questionIds: ["number-order-one", "number-order-two", "number-order-three", "number-order-four"]
                 }
             ]
         },
@@ -124,7 +124,7 @@ window.LittleLearnersData = {
                             difficulty: "beginner"
                         }
                     ],
-                    questionIds: ["count-objects-one", "count-objects-two"]
+                    questionIds: ["count-objects-one", "count-objects-two", "count-objects-three", "count-objects-four"]
                 },
                 {
                     id: "count-sequence",
@@ -206,7 +206,7 @@ window.LittleLearnersData = {
                             difficulty: "beginner"
                         }
                     ],
-                    questionIds: ["count-sequence-one", "count-sequence-two"]
+                    questionIds: ["count-sequence-one", "count-sequence-two", "count-sequence-three", "count-sequence-four"]
                 }
             ]
         },
@@ -238,14 +238,14 @@ window.LittleLearnersData = {
                         ]
                     },
                     practicePrompt: "Count one button, then two more buttons. How many buttons altogether?",
-                    questionIds: ["join-groups-one", "join-groups-two"]
+                    questionIds: ["join-groups-one", "join-groups-two", "join-groups-three", "join-groups-four"]
                 },
                 {
                     id: "add-to-five",
                     title: "Add small numbers",
                     introduction: "We can add small numbers by counting the objects in both groups.",
                     instructions: "Look at the number in each group. Count all the dots to find the total.",
-                    objectives: ["Solve addition examples with totals up to 5.", "Connect an addition sentence to a group of objects."],
+                    objectives: ["Solve addition examples with totals up to 5.", "Connect an addition sentence to a group of objects and understand that the equals sign shows the same total."],
                     example: {
                         label: "One plus two makes three",
                         groups: [
@@ -256,7 +256,7 @@ window.LittleLearnersData = {
                         ]
                     },
                     practicePrompt: "Use dots or fingers to work out 2 + 2.",
-                    questionIds: ["add-to-five-one", "add-to-five-two"]
+                    questionIds: ["add-to-five-one", "add-to-five-two", "add-to-five-three", "add-to-five-four"]
                 }
             ]
         },
@@ -287,7 +287,7 @@ window.LittleLearnersData = {
                         ]
                     },
                     practicePrompt: "Imagine taking one star away from a group of four. How many stay?",
-                    questionIds: ["take-away-one", "take-away-two"]
+                    questionIds: ["take-away-one", "take-away-two", "take-away-three", "take-away-four"]
                 },
                 {
                     id: "subtract-to-five",
@@ -304,7 +304,7 @@ window.LittleLearnersData = {
                         ]
                     },
                     practicePrompt: "Show 3 fingers. Fold one down. How many fingers are still up?",
-                    questionIds: ["subtract-to-five-one", "subtract-to-five-two"]
+                    questionIds: ["subtract-to-five-one", "subtract-to-five-two", "subtract-to-five-three", "subtract-to-five-four"]
                 }
             ]
         },
@@ -336,7 +336,7 @@ window.LittleLearnersData = {
                         ]
                     },
                     practicePrompt: "Point to the shape with three straight sides.",
-                    questionIds: ["meet-shapes-one", "meet-shapes-two"]
+                    questionIds: ["meet-shapes-one", "meet-shapes-two", "meet-shapes-three", "meet-shapes-four"]
                 },
                 {
                     id: "shapes-around-us",
@@ -354,7 +354,7 @@ window.LittleLearnersData = {
                         ]
                     },
                     practicePrompt: "Look around you. Can you find something shaped like a rectangle?",
-                    questionIds: ["shapes-around-us-one", "shapes-around-us-two"]
+                    questionIds: ["shapes-around-us-one", "shapes-around-us-two", "shapes-around-us-three", "shapes-around-us-four"]
                 }
             ]
         }

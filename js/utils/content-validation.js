@@ -133,8 +133,113 @@
         });
     }
 
+    function getQuestionCategoryId(question) {
+        // Existing question data calls this field "category"; accept the explicit alias too.
+        if (question.categoryId !== undefined) return question.categoryId;
+        return question.category;
+    }
+
+    function validateQuestions(questions, categoryLessons, errors) {
+        if (!isRecord(questions)) {
+            errors.push({ context: "learningData", property: "questions", message: "must be an object keyed by question id" });
+            return;
+        }
+
+        const questionIds = new Set();
+        Object.keys(questions).forEach(function (questionKey) {
+            const context = 'question "' + questionKey + '"';
+            const question = questions[questionKey];
+            if (!isRecord(question)) {
+                errors.push({ context: context, property: "question", message: "must be an object" });
+                return;
+            }
+
+            if (!hasText(question.id)) {
+                errors.push({ context: context, property: "id", message: "must be a non-empty string" });
+            } else {
+                if (questionIds.has(question.id)) {
+                    errors.push({ context: context, property: "id", message: 'duplicates question id "' + question.id + '"' });
+                } else {
+                    questionIds.add(question.id);
+                }
+                if (question.id !== questionKey) {
+                    errors.push({ context: context, property: "id", message: "must match its question map key" });
+                }
+            }
+
+            const categoryId = getQuestionCategoryId(question);
+            if (!hasText(categoryId)) {
+                errors.push({ context: context, property: "categoryId", message: "must be a non-empty string" });
+            } else {
+                if (question.categoryId !== undefined && hasText(question.category) && question.category !== question.categoryId) {
+                    errors.push({ context: context, property: "categoryId", message: "must match category when both fields are provided" });
+                }
+                const lessons = categoryLessons.get(categoryId);
+                if (!lessons) {
+                    errors.push({ context: context, property: "categoryId", message: 'references missing category "' + categoryId + '"' });
+                }
+            }
+
+            if (!hasText(question.lessonId)) {
+                errors.push({ context: context, property: "lessonId", message: "must be a non-empty string" });
+            } else if (hasText(categoryId)) {
+                const lessons = categoryLessons.get(categoryId);
+                if (lessons && !lessons.has(question.lessonId)) {
+                    errors.push({ context: context, property: "lessonId", message: 'references missing lesson "' + question.lessonId + '" in category "' + categoryId + '"' });
+                }
+            }
+
+            if (!hasText(question.prompt)) {
+                errors.push({ context: context, property: "prompt", message: "must be a non-empty string" });
+            }
+
+            if (!Array.isArray(question.choices)) {
+                errors.push({ context: context, property: "choices", message: "must be an array with at least two choices" });
+            } else {
+                if (question.choices.length < 2) {
+                    errors.push({ context: context, property: "choices", message: "must contain at least two choices" });
+                }
+                const choiceIds = new Set();
+                question.choices.forEach(function (choice, choiceIndex) {
+                    const property = "choices[" + choiceIndex + "]";
+                    if (!isRecord(choice)) {
+                        errors.push({ context: context, property: property, message: "must be an object" });
+                        return;
+                    }
+                    if (!hasText(choice.id)) {
+                        errors.push({ context: context, property: property + ".id", message: "must be a non-empty string" });
+                    } else if (choiceIds.has(choice.id)) {
+                        errors.push({ context: context, property: property + ".id", message: 'duplicates choice id "' + choice.id + '" within this question' });
+                    } else {
+                        choiceIds.add(choice.id);
+                    }
+                    if (!hasText(choice.label)) {
+                        errors.push({ context: context, property: property + ".label", message: "must be a non-empty string" });
+                    }
+                });
+
+                if (!hasText(question.correctChoiceId)) {
+                    errors.push({ context: context, property: "correctChoiceId", message: "must be a non-empty string" });
+                } else if (!choiceIds.has(question.correctChoiceId)) {
+                    errors.push({ context: context, property: "correctChoiceId", message: 'must reference an existing choice id "' + question.correctChoiceId + '"' });
+                }
+            }
+
+            if (!isRecord(question.feedback)) {
+                errors.push({ context: context, property: "feedback", message: "must be an object" });
+            }
+            if (!question.feedback || !hasText(question.feedback.correct)) {
+                errors.push({ context: context, property: "feedback.correct", message: "must be a non-empty string" });
+            }
+            if (!question.feedback || !hasText(question.feedback.incorrect)) {
+                errors.push({ context: context, property: "feedback.incorrect", message: "must be a non-empty string" });
+            }
+        });
+    }
+
     function validate(categories, questions) {
         const errors = [];
+        const categoryLessons = new Map();
         if (!Array.isArray(categories)) {
             errors.push({ context: "learningData", property: "categories", message: "must be an array" });
         } else {
@@ -147,7 +252,10 @@
                 }
                 if (!hasText(category.id)) errors.push({ context: categoryContext, property: "id", message: "must be a non-empty string" });
                 else if (categoryIds.has(category.id)) errors.push({ context: categoryContext, property: "id", message: "duplicates a category id" });
-                else categoryIds.add(category.id);
+                else {
+                    categoryIds.add(category.id);
+                    categoryLessons.set(category.id, new Set());
+                }
 
                 if (!Array.isArray(category.lessons)) {
                     errors.push({ context: categoryContext, property: "lessons", message: "must be an array" });
@@ -162,7 +270,10 @@
                     }
                     if (!hasText(lesson.id)) errors.push({ context: context, property: "id", message: "must be a non-empty string" });
                     else if (lessonIds.has(lesson.id)) errors.push({ context: context, property: "id", message: "duplicates a lesson id within this category" });
-                    else lessonIds.add(lesson.id);
+                    else {
+                        lessonIds.add(lesson.id);
+                        if (categoryLessons.has(category.id)) categoryLessons.get(category.id).add(lesson.id);
+                    }
                     if (!hasText(lesson.title)) errors.push({ context: context, property: "title", message: "is required and must be a non-empty string" });
 
                     if (lesson.learn !== undefined) validateLearn(lesson.learn, context, errors);
@@ -191,12 +302,15 @@
                             return;
                         }
                         if (question.id !== questionId) errors.push({ context: context, property: property, message: 'question "' + questionId + '" has a mismatched id' });
-                        if (question.category !== category.id) errors.push({ context: context, property: property, message: 'question "' + questionId + '" belongs to category "' + question.category + '" instead of "' + category.id + '"' });
+                        const questionCategoryId = getQuestionCategoryId(question);
+                        if (questionCategoryId !== category.id) errors.push({ context: context, property: property, message: 'question "' + questionId + '" belongs to category "' + questionCategoryId + '" instead of "' + category.id + '"' });
                         if (question.lessonId !== lesson.id) errors.push({ context: context, property: property, message: 'question "' + questionId + '" belongs to lesson "' + question.lessonId + '" instead of "' + lesson.id + '"' });
                     });
                 });
             });
         }
+
+        validateQuestions(questions, categoryLessons, errors);
 
         errors.forEach(function (error) {
             console.error("[Learning content] " + error.context + "." + error.property + ": " + error.message);

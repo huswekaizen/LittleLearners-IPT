@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Little Learners makes foundational math fun, simple, and accessible for everyone.">
-    <meta name="theme-color" content="#f5f8f2">
+    <meta name="theme-color" content="#fff8e9">
     <title>Little Learners | Learn, Explore, Grow</title>
     <script src="js/utils/accessibility-preferences.js"></script>
     <link rel="stylesheet" href="css/style.css">
@@ -26,9 +26,9 @@
     <a class="skip-link" href="#main-content">Skip to content</a>
 
     <header class="site-header">
-        <a class="brand" href="#welcome" data-screen-link aria-label="Little Learners home">
-            <span class="brand-mark" aria-hidden="true">✳</span>
-            <span>little learners<span class="brand-period">.</span></span>
+        <a class="brand" href="#welcome" data-screen-link>
+            <img class="brand-logo" src="assets/images/characters/bo-logo.png" alt="Bo the bear mascot" width="64" height="64">
+            <span class="brand-name">Little <span class="brand-name-accent">Learners</span></span>
         </a>
         <button class="menu-toggle" type="button" data-nav-toggle aria-controls="site-navigation" aria-expanded="false" aria-label="Open navigation menu">
             <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
@@ -36,8 +36,14 @@
         <nav class="site-nav" id="site-navigation" aria-label="Main navigation">
             <a href="#dashboard" data-screen-link>Dashboard</a>
             <a href="#explore" data-screen-link>Explore</a>
-            <a class="nav-cta" href="#my-learning" data-screen-link>Let’s learn <span aria-hidden="true">↗</span></a>
-            <button class="accessibility-button" type="button" data-open-accessibility aria-haspopup="dialog" aria-controls="accessibility-dialog">Accessibility</button>
+            <a href="#my-learning" data-screen-link>Let’s learn</a>
+            <button class="accessibility-button" type="button" data-open-accessibility aria-haspopup="dialog" aria-controls="accessibility-dialog">
+                <svg class="accessibility-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <circle cx="12" cy="4.5" r="1.7" fill="currentColor"></circle>
+                    <path d="M4.5 8.2h15M12 8.2v6.1m0 0-4 5.1m4-5.1 4 5.1M8.6 8.2l1.4 5.2 2 .8 2-.8 1.4-5.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                <span>Accessibility</span>
+            </button>
         </nav>
     </header>
 
@@ -76,7 +82,6 @@
         <section class="screen welcome-screen" id="welcome" data-screen>
             <div class="welcome-layout">
                 <div class="welcome-copy">
-                    <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> BIG DISCOVERIES START SMALL</p>
                     <h1>Math is a little more <span class="text-highlight">magical</span> here.</h1>
                     <p class="hero-description">A happy place to count, discover shapes, and grow your confidence—one little step at a time.</p>
                     <div class="hero-actions">
@@ -108,25 +113,30 @@
 
         <section class="screen dashboard-screen" id="dashboard" data-screen hidden>
             <div class="page-container">
-                <div class="dashboard-welcome">
-                    <div>
-                        <p class="eyebrow">YOUR LITTLE LEARNING GARDEN</p>
-                        <h1>Hi, curious learner <span aria-hidden="true">🌼</span></h1>
-                        <p>Every big idea starts with a little question. What shall we explore today?</p>
+                <div class="dashboard-hero">
+                    <div class="dashboard-welcome">
+                        <div>
+                            <h1>Hi, I'm Bo! What shall we learn today?</h1>
+                            <p>Ready for a little learning adventure?</p>
+                        </div>
                     </div>
+                    <div class="dashboard-mascot" data-dashboard-mascot></div>
                 </div>
-
-                <div class="progress-strip" aria-label="Overall learning progress">
-                    <div class="progress-copy"><span class="progress-icon" aria-hidden="true">✦</span><div><strong>Your learning garden is growing</strong><p>Every lesson you complete is a little step forward.</p></div></div>
-                    <div class="progress-summary" data-overall-progress aria-live="polite"></div>
-                </div>
-                <section class="recent-activity-section" aria-labelledby="recent-activity-title">
-                    <div class="section-heading"><div><p class="eyebrow">YOUR LATEST STEPS</p><h2 id="recent-activity-title">Recent learning</h2></div></div>
-                    <div data-recent-activity></div>
-                </section>
 
                 <section class="dashboard-next-step" aria-label="Continue learning">
-                    <article class="next-step-card"><span class="next-step-star" aria-hidden="true">✦</span><div data-continue-learning></div></article>
+                    <article class="next-step-card">
+                        <div class="continue-copy" data-continue-learning></div>
+                        <div class="continue-art" aria-hidden="true"><span class="continue-art-sun">&#9728;</span><span class="continue-art-book">&#128214;</span><span class="continue-art-pencil">&#9998;</span></div>
+                    </article>
+                </section>
+
+                <section class="progress-strip" aria-label="Overall learning progress">
+                    <div class="progress-copy"><span class="progress-icon" aria-hidden="true">&#10022;</span><div><strong>My learning</strong><p>Look at all the steps you have taken!</p></div></div>
+                    <div class="progress-summary" data-overall-progress aria-live="polite"></div>
+                </section>
+                <section class="recent-activity-section" aria-labelledby="recent-activity-title">
+                    <div class="section-heading"><div><h2 id="recent-activity-title">Recent learning</h2></div><span class="recent-section-note">Little steps, one at a time</span></div>
+                    <div data-recent-activity></div>
                 </section>
             </div>
         </section>
@@ -136,8 +146,8 @@
                 <a class="back-link" href="#dashboard" data-screen-link><span aria-hidden="true">←</span> Dashboard</a>
                 <header class="explore-heading">
                     <p class="eyebrow">PICK YOUR PATH</p>
-                    <h1>What sounds fun?</h1>
-                    <p>Explore a learning path and choose what you would like to study.</p>
+                    <h1>Choose a learning path</h1>
+                    <p>Pick a colorful card to get started.</p>
                 </header>
                 <div class="category-grid" data-explore-view></div>
             </div>
@@ -168,7 +178,7 @@
     </main>
 
     <footer class="site-footer">
-        <a class="footer-brand" href="#welcome" data-screen-link><span aria-hidden="true">✳</span> little learners<span class="brand-period">.</span></a>
+        <a class="footer-brand" href="#welcome" data-screen-link><img class="brand-logo" src="assets/images/characters/bo-logo.png" alt="Bo the bear mascot" width="64" height="64"><span class="brand-name">Little <span class="brand-name-accent">Learners</span></span></a>
         <p>Making learning simple, fun, and accessible for everyone.</p>
         <span class="footer-sun" aria-hidden="true">☀</span>
     </footer>
