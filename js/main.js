@@ -284,7 +284,7 @@ function renderDashboard() {
             const latest = entry.progress.latestAttempt;
             const best = entry.progress.bestAttempt;
             const completedAt = latest.completedAt;
-            return '<li class="recent-activity-card recent-card-' + escapeHtml(entry.category.id) + '"><div class="recent-card-art">' + categoryIllustrationMarkup(entry.category.id) + '</div>' +
+            return '<li class="recent-activity-card learning-activity-card recent-card-' + escapeHtml(entry.category.id) + '"><div class="recent-card-art">' + categoryIllustrationMarkup(entry.category.id) + '</div>' +
                 '<div class="recent-card-content"><div class="recent-card-top"><span class="recent-category-tag">' + escapeHtml(entry.category.title) + '</span><span class="recent-complete-tag"><span aria-hidden="true">&#10003;</span> Completed</span></div>' +
                 '<h3>' + escapeHtml(entry.lesson.title) + '</h3><time class="recent-completion" datetime="' + escapeHtml(completedAt) + '">' + escapeHtml(dateFormat.format(new Date(completedAt))) + '</time>' +
                 '<div class="recent-scores"><span>Latest ' + latest.score + '/' + latest.totalQuestions + ' &#183; ' + latest.percentage + '%</span><span>Best ' + best.score + '/' + best.totalQuestions + ' &#183; ' + best.percentage + '%</span></div>' +
@@ -299,7 +299,7 @@ function renderExplore() {
     const container = document.querySelector("[data-explore-view]");
     const cardColors = ["card-lime", "card-blue", "card-peach", "card-lavender", "card-yellow"];
     container.innerHTML = learningData.categories.map(function (category, index) {
-        return '<a class="category-card ' + cardColors[index % cardColors.length] + '" href="#category/' +
+        return '<a class="category-card learning-activity-card ' + cardColors[index % cardColors.length] + '" href="#category/' +
             encodeURIComponent(category.id) + '" data-screen-link aria-label="Explore ' + escapeHtml(category.title) +
             ', ' + category.lessons.length + ' lessons">' +
             '<div class="explore-card-top"><span class="card-label">LEARNING PATH</span><span class="card-arrow" aria-hidden="true">&#8599;</span></div>' +
@@ -332,16 +332,18 @@ function renderMyLearning() {
                 : null;
             const completed = Boolean(progress && progress.completed);
             const status = !available ? "Progress unavailable" : completed ? "Completed" : "Not completed yet";
+            const description = lesson.objectives && lesson.objectives[0] || lesson.introduction;
             const scoreDetails = completed
                 ? '<p class="my-learning-scores"><span>Latest: ' + progress.latestAttempt.score + '/' + progress.latestAttempt.totalQuestions +
                     ' (' + progress.latestAttempt.percentage + '%)</span><span>Best: ' + progress.bestAttempt.score + '/' + progress.bestAttempt.totalQuestions +
                     ' (' + progress.bestAttempt.percentage + '%)</span></p>'
-                : (available ? '<p class="my-learning-scores">No saved completion yet</p>' : '');
+                : '';
             const action = !available ? "Open Lesson" : completed ? "Practice Again" : "Start Lesson";
             const statusClass = !available ? "is-unavailable" : completed ? "is-completed" : "is-not-completed";
             const destination = completed ? "activity" : "lesson";
-            return '<li class="my-learning-lesson"><div class="my-learning-lesson-heading"><div><h3>' + escapeHtml(lesson.title) +
-                '</h3><p>' + escapeHtml(lesson.introduction) + '</p></div><span class="my-learning-status ' + statusClass + '">' + escapeHtml(status) + '</span></div>' +
+            return '<li class="my-learning-lesson learning-activity-card category-activity-' + escapeHtml(category.id) + ' my-learning-lesson-' + escapeHtml(category.id) + '"><div class="my-learning-lesson-art">' +
+                categoryIllustrationMarkup(category.id) + '</div><div class="my-learning-lesson-heading"><div><h3>' + escapeHtml(lesson.title) +
+                '</h3><p>' + escapeHtml(description) + '</p></div><span class="my-learning-status ' + statusClass + '">' + escapeHtml(status) + '</span></div>' +
                 scoreDetails + '<a class="button ' + (completed ? 'button-quiet' : 'button-primary') + '" href="#' + destination + '/' +
                 encodeURIComponent(category.id) + '/' + encodeURIComponent(lesson.id) + '" data-screen-link>' + action + '</a></li>';
         }).join("");
@@ -351,8 +353,8 @@ function renderMyLearning() {
                 escapeHtml(category.title) + ' lesson completion" aria-valuemin="0" aria-valuemax="' + categoryProgress.totalLessons +
                 '" aria-valuenow="' + categoryProgress.completedLessons + '"><span style="width:' + categoryProgress.percentage + '%"></span></div>'
             : '<p class="my-learning-category-count">Category progress unavailable</p>';
-        return '<section class="my-learning-category" aria-labelledby="my-learning-' + escapeHtml(category.id) + '">' +
-            '<div class="my-learning-category-heading"><span class="category-heading-icon" aria-hidden="true">' + escapeHtml(category.icon) + '</span>' +
+        return '<section class="my-learning-category learning-activity-card category-activity-' + escapeHtml(category.id) + ' my-learning-category-' + escapeHtml(category.id) + '" aria-labelledby="my-learning-' + escapeHtml(category.id) + '">' +
+            '<div class="my-learning-category-heading"><span class="my-learning-category-art">' + categoryIllustrationMarkup(category.id) + '</span>' +
             '<div><h2 id="my-learning-' + escapeHtml(category.id) + '">' + escapeHtml(category.title) + '</h2><p>' + escapeHtml(category.description) + '</p></div>' +
             '</div>' + categorySummary + '<ul class="my-learning-lesson-list">' + lessons + '</ul></section>';
     }).join("");
@@ -372,9 +374,10 @@ function renderCategory(category) {
         const firstObjective = lesson.objectives[0] || lesson.introduction;
         const lessonNumber = String(index + 1).padStart(2, "0");
 
-        return '<article class="lesson-card">' +
-            '<span class="lesson-order" aria-hidden="true">' + lessonNumber + '</span>' +
-            '<div><h3>' + escapeHtml(lesson.title) + '</h3>' +
+        return '<article class="lesson-card learning-activity-card category-activity-' + escapeHtml(category.id) + '">' +
+            '<div class="lesson-card-art">' + categoryIllustrationMarkup(category.id) +
+            '<span class="lesson-order" aria-hidden="true">' + lessonNumber + '</span></div>' +
+            '<div class="lesson-card-copy"><h3>' + escapeHtml(lesson.title) + '</h3>' +
             '<p>' + escapeHtml(firstObjective) + '</p>' +
             '<a class="text-link" href="#lesson/' + category.id + '/' + lesson.id + '" data-screen-link>' +
             'Open lesson <span aria-hidden="true">→</span></a></div></article>';
@@ -484,7 +487,7 @@ function renderLearn(category, lesson) {
         const visualDescription = [example.label].concat(example.groups.map(function (group) {
             return group.caption;
         })).join(". ");
-        return '<article class="learn-example-card" aria-labelledby="learn-example-title-' + index + '">' +
+        return '<article class="learn-example-card learning-activity-card category-activity-' + escapeHtml(category.id) + '" aria-labelledby="learn-example-title-' + index + '">' +
             '<h3 id="learn-example-title-' + index + '">' + escapeHtml(example.label) + '</h3>' +
             '<div class="learn-example-visual" role="img" aria-label="' + escapeHtml(visualDescription) + '">' +
             renderGroups(example.groups, "visual-groups") + '</div></article>';
@@ -497,16 +500,16 @@ function renderLearn(category, lesson) {
         ' · LESSON: ' + escapeHtml(lesson.title) + '</p><h1>' + escapeHtml(learn.title) + '</h1>' +
         '<p class="learn-introduction">' + escapeHtml(learn.introduction) + '</p></header>' +
         '<div class="learn-content"><div class="learn-guidance">' +
-        '<section class="instruction-panel learn-instructions" aria-labelledby="learn-instructions-title">' +
+        '<section class="instruction-panel learn-instructions learning-activity-card category-activity-' + escapeHtml(category.id) + '" aria-labelledby="learn-instructions-title">' +
         '<span class="instruction-icon" aria-hidden="true">👆</span><div><h2 id="learn-instructions-title">Let’s try it together</h2>' +
         '<p>' + escapeHtml(learn.instructions) + '</p></div></section>' +
-        '<section class="lesson-objectives learn-objectives" aria-labelledby="learn-objectives-title">' +
+        '<section class="lesson-objectives learn-objectives learning-activity-card category-activity-' + escapeHtml(category.id) + '" aria-labelledby="learn-objectives-title">' +
         '<h2 id="learn-objectives-title">We will learn to…</h2><ul>' + objectives + '</ul></section></div>' +
-        '<section class="learn-examples-panel" aria-labelledby="learn-examples-title">' +
+        '<section class="learn-examples-panel learning-activity-card category-activity-' + escapeHtml(category.id) + '" aria-labelledby="learn-examples-title">' +
         '<p class="eyebrow">LOOK AND LEARN</p><h2 id="learn-examples-title">Let’s look together</h2>' +
         '<div class="learn-example-list">' + examples + '</div></section></div>' +
-        '<section class="learn-next-steps" aria-label="Next learning phases">' +
-        '<div class="learn-discover-placeholder"><span class="learn-phase-number" aria-hidden="true">2</span>' +
+        '<section class="learn-next-steps learning-activity-card category-activity-' + escapeHtml(category.id) + '" aria-label="Next learning phases">' +
+        '<div class="learn-discover-placeholder ' + (hasCards ? 'is-available' : 'is-unavailable') + '"><span class="learn-phase-number" aria-hidden="true">2</span>' +
         '<div><p class="eyebrow">NEXT PHASE · DISCOVER</p><h2>' + (hasCards ? 'Explore with flashcards' : 'Flashcards are not available yet') + '</h2>' +
         '<p>' + (hasCards ? 'Turn over each card and discover a little more.' : 'You can still try the activity when you are ready.') + '</p></div></div>' +
         '<div class="learn-phase-actions">' + (hasCards
@@ -531,7 +534,7 @@ function renderDiscover(category, lesson, focusTarget, announcement) {
     const card = cards[discoverState.index];
     const view = document.querySelector("[data-lesson-view]");
     const answer = discoverState.revealed
-        ? '<section class="discover-answer" aria-labelledby="discover-answer-title"><h2 id="discover-answer-title">Here is what we learned</h2><p>' +
+        ? '<section class="discover-answer learning-activity-card category-activity-' + escapeHtml(category.id) + '" aria-labelledby="discover-answer-title"><h2 id="discover-answer-title">Here is what we learned</h2><p>' +
             escapeHtml(card.accessibleText) + '</p></section>'
         : '';
     view.innerHTML = '<div class="discover-heading"><div><p class="eyebrow">' + escapeHtml(category.shortTitle.toUpperCase()) +
@@ -539,7 +542,7 @@ function renderDiscover(category, lesson, focusTarget, announcement) {
         '<p class="discover-description">' + escapeHtml(card.description) + '</p></div>' +
         '<p class="discover-position" aria-label="Card ' + (discoverState.index + 1) + ' of ' + cards.length + '">Card <strong>' +
         (discoverState.index + 1) + '</strong> of <strong>' + cards.length + '</strong></p></div>' +
-        '<article class="discover-card" aria-labelledby="discover-card-title">' + renderFlashcardVisual(card) + answer +
+        '<article class="discover-card learning-activity-card category-activity-' + escapeHtml(category.id) + '" aria-labelledby="discover-card-title">' + renderFlashcardVisual(card) + answer +
         '<button class="button button-primary discover-reveal" type="button" data-discover-reveal aria-expanded="' +
         String(discoverState.revealed) + '">' + (discoverState.revealed ? 'Hide answer' : 'Reveal answer') + '</button></article>' +
         '<div class="discover-card-controls" role="group" aria-label="Flashcard controls">' +
@@ -576,13 +579,13 @@ function renderLesson(category, lesson) {
         '<p class="eyebrow">' + escapeHtml(category.shortTitle.toUpperCase()) + ' · LITTLE LESSON</p>' +
         '<h1>' + escapeHtml(lesson.title) + '</h1>' +
         '<p class="lesson-intro">' + escapeHtml(lesson.introduction) + '</p>' +
-        '<section class="lesson-objectives" aria-labelledby="lesson-objectives-title">' +
+        '<section class="lesson-objectives learning-activity-card category-activity-' + escapeHtml(category.id) + '" aria-labelledby="lesson-objectives-title">' +
         '<h2 id="lesson-objectives-title">We will learn to…</h2><ul>' + objectives + '</ul></section>' +
-        '<div class="instruction-panel"><span class="instruction-icon" aria-hidden="true">👆</span>' +
+        '<div class="instruction-panel learning-activity-card category-activity-' + escapeHtml(category.id) + '"><span class="instruction-icon" aria-hidden="true">👆</span>' +
         '<p><strong>Let’s try it together.</strong><br>' + escapeHtml(lesson.instructions) + '</p></div>' +
         '<a class="button button-primary" href="#activity/' + category.id + '/' + lesson.id + '" data-screen-link>' +
         'Try a little activity <span aria-hidden="true">→</span></a></div>' +
-        '<div class="lesson-visual" aria-label="Visual example: ' + escapeHtml(lesson.example.label) + '">' +
+        '<div class="lesson-visual learning-activity-card category-activity-' + escapeHtml(category.id) + '" aria-label="Visual example: ' + escapeHtml(lesson.example.label) + '">' +
         '<span class="visual-label">' + escapeHtml(lesson.example.label) + '</span>' +
         renderGroups(lesson.example.groups, "visual-groups") +
         '<div class="practice-callout"><span class="eyebrow">YOUR TURN</span>' +
@@ -609,8 +612,8 @@ function renderActivity(focusChoiceId, focusQuestion) {
     view.innerHTML = '<a class="back-link" href="#lesson/' + category.id + '/' + lesson.id + '" data-screen-link><span aria-hidden="true">←</span> Back to ' + escapeHtml(lesson.title) + '</a>' +
         '<div class="activity-topline"><span class="activity-tag">' + escapeHtml(category.shortTitle.toUpperCase()) + ' · PRACTICE TOGETHER</span><span class="question-count">Question <strong>' + (state.index + 1) + '</strong> of <strong>' + state.questions.length + '</strong></span></div>' +
         '<div class="question-progress" role="progressbar" aria-label="Question progress" aria-valuemin="0" aria-valuemax="' + state.questions.length + '" aria-valuenow="' + (state.index + 1) + '"><span style="width:' + progress + '%"></span></div>' +
-        '<div class="quiz-panel"><div class="quiz-heading"><span class="quiz-illustration" aria-hidden="true">' + escapeHtml(category.icon) + '</span><div><p class="eyebrow">TAKE YOUR TIME</p><h1>' + escapeHtml(lesson.title) + '</h1><p class="activity-intro">Choose the answer that you think is right.</p></div></div>' +
-        '<article class="activity-question"><p class="question-label">PRACTICE ' + String(state.index + 1).padStart(2,'0') + '</p><h2>' + escapeHtml(question.prompt) + '</h2><p class="question-instruction">' + escapeHtml(question.instruction) + '</p>' +
+        '<div class="quiz-panel learning-activity-card category-activity-' + escapeHtml(category.id) + '"><div class="quiz-heading"><span class="quiz-illustration quiz-category-art">' + categoryIllustrationMarkup(category.id) + '</span><div><p class="eyebrow">TAKE YOUR TIME</p><h1>' + escapeHtml(lesson.title) + '</h1><p class="activity-intro">Choose the answer that you think is right.</p></div></div>' +
+        '<article class="activity-question learning-activity-card"><p class="question-label">PRACTICE ' + String(state.index + 1).padStart(2,'0') + '</p><h2>' + escapeHtml(question.prompt) + '</h2><p class="question-instruction">' + escapeHtml(question.instruction) + '</p>' +
         '<div class="question-visual" role="img" aria-label="' + escapeHtml(question.visualDescription) + '">' + renderGroups(question.groups, 'visual-groups') + '</div><div class="answer-grid" role="group" aria-label="Answer choices for question ' + (state.index + 1) + '">' + choices + '</div>' + feedback + '<div class="quiz-actions">' + action + '</div></article></div><p class="reassurance">There’s no rush. Learning is all about trying.</p>';
     if (focusChoiceId) {
         const selectedOption = Array.from(view.querySelectorAll('[data-answer-option]')).find(function (option) {
